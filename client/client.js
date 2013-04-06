@@ -4,18 +4,6 @@ Meteor.subscribe("directory");
 Meteor.subscribe("games");
 Meteor.subscribe("characters");
 
-// If no party selected, select one.
-Meteor.startup(function () {
-  Deps.autorun(function () {
-    if (! Session.get("selected")) {
-      var game = Games.findOne();
-      if (game) {
-        Session.set("selected", game._id);
-      }
-    }
-  });
-});
-
 ///////////////////////////////////////////////////////////////////////////////
 // Create Party dialog
 
