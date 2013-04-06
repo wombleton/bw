@@ -2,6 +2,7 @@
 
 Meteor.subscribe("directory");
 Meteor.subscribe("games");
+Meteor.subscribe("characters");
 
 // If no party selected, select one.
 Meteor.startup(function () {
@@ -38,22 +39,19 @@ Template.page.events({
 });
 
 Template.page.characters = function() {
-    var chars = Characters.find({
-    }, {
+    return Characters.find({}, {
         sort: {
             updated: -1
         }
     });
-    return chars;
 };
 
 Template.page.games = function() {
-    var games = Games.find({}, {
+    return Games.find({}, {
         sort: {
             updated: -1
         }
     });
-    return games;
 };
 
 Template.page.showCreateCharacterDialog = function() {
@@ -88,19 +86,16 @@ Template.createGameDialog.events({
 });
 Template.createCharacterDialog.events({
   'click .save': function(event, template) {
-    var description = template.find(".description").value;
+    var name = template.find(".name").value;
 
-    if (description.length) {
-      Meteor.call('createGame', {
-        description: description
-      }, function (error, game) {
-        if (!error) {
-          Session.set("selected", game);
-        }
+    if (name.length) {
+      Meteor.call('createCharacter', {
+        name: name
+      }, function (error, character) {
       });
       Session.set("showCreateCharacterDialog", false);
     } else {
-      Session.set("createError", "It needs a title and a description, or why bother?");
+      Session.set("createError", "Characters needs names.");
     }
   },
 
