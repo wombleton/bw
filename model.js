@@ -23,7 +23,7 @@ Games.allow({
         return false; // not the owner
     }
 
-    var allowed = ["title", "description", "x", "y"];
+    var allowed = ["description"];
     if (_.difference(fields, allowed).length)
       return false; // tried to write to forbidden field
 
@@ -34,13 +34,37 @@ Games.allow({
   },
   remove: function (userId, game) {
     // You can only remove parties that you created and nobody is going to.
-    return game.owner === userId && attending(game) === 0;
+    return game.owner === userId;
   }
 });
 
-attending = function (party) {
-  return (_.groupBy(party.rsvps, 'rsvp').yes || []).length;
-};
+//// Characters
+
+Characters = new Meteor.Collection("characters");
+
+Characters.allow({
+  insert: function (userId, character) {
+    return false; // no cowboy inserts -- use createParty method
+  },
+  update: function (userId, character, fields, modifier) {
+    if (userId !== character.owner) {
+        return false; // not the owner
+    }
+
+    var allowed = ["name"];
+    if (_.difference(fields, allowed).length)
+      return false; // tried to write to forbidden field
+
+    // A good improvement would be to validate the type of the new
+    // value of the field (and if a string, the length.) In the
+    // future Meteor will have a schema system to makes that easier.
+    return true;
+  },
+  remove: function (userId, character) {
+    // You can only remove parties that you created and nobody is going to.
+    return character.owner === userId;
+  }
+});
 
 Meteor.methods({
   // options should include: title, description, x, y, public
@@ -62,17 +86,17 @@ Meteor.methods({
   },
   createCharacter: function(options) {
     options = options || {};
-    if (! (typeof options.description === "string" && options.description.length ))
+    if (! (typeof options.name === "string" && options.name.length ))
       throw new Meteor.Error(400, "Required parameter missing");
-    if (options.description.length > 1000)
+    if (options.name.length > 100)
       throw new Meteor.Error(413, "Description too long");
     if (! this.userId)
       throw new Meteor.Error(403, "You must be logged in");
 
     return Characters.insert({
       owner: this.userId,
-      description: options.description,
-      players: [ this.userId ],
+      name: options.name,
+      stats: [],
       updated: Date.now()
     });
   }
@@ -98,30 +122,3 @@ var contactEmail = function (user) {
   return null;
 };
 
-//// Characters
-
-Characters = new Meteor.Collection('characters');
-
-Characters.allow({
-  insert: function (userId, character) {
-    return false; // no cowboy inserts -- use createParty method
-  },
-  update: function (userId, character, fields, modifier) {
-    if (userId !== character.owner) {
-        return false; // not the owner
-    }
-
-    var allowed = ["title", "description", "x", "y"];
-    if (_.difference(fields, allowed).length)
-      return false; // tried to write to forbidden field
-
-    // A good improvement would be to validate the type of the new
-    // value of the field (and if a string, the length.) In the
-    // future Meteor will have a schema system to makes that easier.
-    return true;
-  },
-  remove: function (userId, character) {
-    // You can only remove parties that you created and nobody is going to.
-    return character.owner === userId && attending(game) === 0;
-  }
-})
