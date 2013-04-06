@@ -80,7 +80,9 @@ Meteor.methods({
     return Games.insert({
       owner: this.userId,
       description: options.description,
-      players: [ this.userId ],
+      users: [ this.userId ],
+      players: [],
+      gm: undefined,
       updated: Date.now()
     });
   },
