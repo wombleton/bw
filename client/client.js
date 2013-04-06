@@ -5,36 +5,24 @@ Meteor.subscribe("games");
 Meteor.subscribe("characters");
 
 ///////////////////////////////////////////////////////////////////////////////
-// Create Party dialog
 
-function openCreateGameDialog() {
-  Session.set("createError", null);
-  Session.set("showCreateGameDialog", true);
-}
-
-function openCreateCharacterDialog() {
-  Session.set("createError", null);
-  Session.set("showCreateCharacterDialog", true);
+// PAGE
+Template.page.active = function() {
+    return Games.findOne(Session.get('active'));
 };
 
-Template.page.events({
+// FOYER
+Template.foyer.events({
     'click [data-action=new-game]': function() {
-        openCreateGameDialog();
+        Session.set("createError", null);
+        Session.set("showCreateGameDialog", true);
     },
-    'click [data-action=new-character]': function() {
-        openCreateCharacterDialog();
+    'click .game': function() {
+        Session.set('active', this._id);
     }
 });
 
-Template.page.characters = function() {
-    return Characters.find({}, {
-        sort: {
-            updated: -1
-        }
-    });
-};
-
-Template.page.games = function() {
+Template.foyer.games = function() {
     return Games.find({}, {
         sort: {
             updated: -1
@@ -42,11 +30,11 @@ Template.page.games = function() {
     });
 };
 
-Template.page.showCreateCharacterDialog = function() {
+Template.foyer.showCreateCharacterDialog = function() {
     return Session.get('showCreateCharacterDialog');
 };
 
-Template.page.showCreateGameDialog = function() {
+Template.foyer.showCreateGameDialog = function() {
     return Session.get('showCreateGameDialog');
 };
 
@@ -59,12 +47,12 @@ Template.createGameDialog.events({
         description: description
       }, function (error, game) {
         if (!error) {
-          Session.set("selected", game);
+          Session.set("active", game);
         }
       });
       Session.set("showCreateGameDialog", false);
     } else {
-      Session.set("createError", "It needs a title and a description, or why bother?");
+      Session.set("createError", "Games have to have descriptions.");
     }
   },
 
@@ -72,29 +60,7 @@ Template.createGameDialog.events({
     Session.set("showCreateGameDialog", false);
   }
 });
-Template.createCharacterDialog.events({
-  'click .save': function(event, template) {
-    var name = template.find(".name").value;
-
-    if (name.length) {
-      Meteor.call('createCharacter', {
-        name: name
-      }, function (error, character) {
-      });
-      Session.set("showCreateCharacterDialog", false);
-    } else {
-      Session.set("createError", "Characters needs names.");
-    }
-  },
-
-  'click .cancel': function () {
-    Session.set("showCreateCharacterDialog", false);
-  }
-});
 
 Template.createGameDialog.error = function () {
-  return Session.get("createError");
-};
-Template.createCharacterDialog.error = function () {
   return Session.get("createError");
 };
