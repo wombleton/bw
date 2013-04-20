@@ -69,7 +69,10 @@ Characters.allow({
 Meteor.methods({
     // options should include: description
     createGame: function (options) {
+        var game;
+
         options = options || {};
+
         if (! (typeof options.description === "string" && options.description.length )) {
             throw new Meteor.Error(400, "Required parameter missing");
         }
@@ -80,14 +83,16 @@ Meteor.methods({
             throw new Meteor.Error(403, "You must be logged in");
         }
 
-        return Games.insert({
+        game = {
             owner: this.userId,
             description: options.description,
-            users: [ this.userId ],
-            players: [],
-            gm: undefined,
+            users: {},
             updated: Date.now()
-        });
+        };
+
+        game.users[this.userId] = {};
+
+        return Games.insert(game);
     },
     createCharacter: function(options) {
         options = options || {};
@@ -108,7 +113,27 @@ Meteor.methods({
             updated: Date.now()
         });
     },
-    setRole: function(options) {
+    setRole: function(gameId, role) {
+        var key = ['users']
+            set = {};
+
+        if (!_.isString(gameId)) {
+            throw new Meteor.Error(400, "Required parameter missing.");
+        }
+        if (!_.isString(role)) {
+            throw new Meteor.Error(400, "Required parameter missing.");
+        }
+        if (!this.userId) {
+            throw new Meteor.Error(403, "You must be logged in.");
+        }
+        key.push(this.userId);
+        key.push('role');
+
+        set[key.join('.')] = role;
+
+        Games.update(gameId, {
+            $set: set
+        });
     }
 });
 
