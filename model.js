@@ -90,7 +90,9 @@ Meteor.methods({
             updated: Date.now()
         };
 
-        game.users[this.userId] = {};
+        game.users[this.userId] = {
+            role: 'gm'
+        };
 
         return Games.insert(game);
     },
@@ -111,28 +113,6 @@ Meteor.methods({
             name: options.name,
             stats: [],
             updated: Date.now()
-        });
-    },
-    setRole: function(gameId, role) {
-        var key = ['users']
-            set = {};
-
-        if (!_.isString(gameId)) {
-            throw new Meteor.Error(400, "Required parameter missing.");
-        }
-        if (!_.isString(role)) {
-            throw new Meteor.Error(400, "Required parameter missing.");
-        }
-        if (!this.userId) {
-            throw new Meteor.Error(403, "You must be logged in.");
-        }
-        key.push(this.userId);
-        key.push('role');
-
-        set[key.join('.')] = role;
-
-        Games.update(gameId, {
-            $set: set
         });
     }
 });

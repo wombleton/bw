@@ -3,22 +3,18 @@
         <div class="row-fluid">
             <h1>{{game.description}}</h1>
         </div>
-        {{#if role 'gm'}}
-            GM
+        {{#if gm}}
+        <div class="row-fluid">
+            <p>
+                As the GM, you can invite new players to the game:
+                <form class="form-search">
+                    <input type="text" class="input-medium search-query" placeholder="Player name"/>
+                </form>
+            </p>
+            <fo
+        </div>
+        {{else}
+        quack
         {{/if}}
-        {{#if role 'player'}}
-            GM
-        {{/if}}
-        {{#unless role}}
-            {{> decideRole}}
-        {{/unless}}
-    </div>
-</template>
-
-<template name="decideRole">
-    <div class="row-fluid">
-        <h3>In this game I am a...</h3>
-        <button data-role="gm" class="btn btn-large">GM</button>
-        <button data-role="player" class="btn btn-large">Player</button>
     </div>
 </template>
