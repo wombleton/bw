@@ -67,42 +67,49 @@ Characters.allow({
 });
 
 Meteor.methods({
-  // options should include: title, description, x, y, public
-  createGame: function (options) {
-    options = options || {};
-    if (! (typeof options.description === "string" && options.description.length ))
-      throw new Meteor.Error(400, "Required parameter missing");
-    if (options.description.length > 1000)
-      throw new Meteor.Error(413, "Description too long");
-    if (! this.userId)
-      throw new Meteor.Error(403, "You must be logged in");
+    // options should include: description
+    createGame: function (options) {
+        options = options || {};
+        if (! (typeof options.description === "string" && options.description.length )) {
+            throw new Meteor.Error(400, "Required parameter missing");
+        }
+        if (options.description.length > 1000) {
+            throw new Meteor.Error(413, "Description too long");
+        }
+        if (! this.userId) {
+            throw new Meteor.Error(403, "You must be logged in");
+        }
 
-    return Games.insert({
-      owner: this.userId,
-      description: options.description,
-      users: [ this.userId ],
-      players: [],
-      gm: undefined,
-      updated: Date.now()
-    });
-  },
-  createCharacter: function(options) {
-    options = options || {};
-    if (! (typeof options.name === "string" && options.name.length ))
-      throw new Meteor.Error(400, "Required parameter missing");
-    if (options.name.length > 100)
-      throw new Meteor.Error(413, "Description too long");
-    if (! this.userId)
-      throw new Meteor.Error(403, "You must be logged in");
+        return Games.insert({
+            owner: this.userId,
+            description: options.description,
+            users: [ this.userId ],
+            players: [],
+            gm: undefined,
+            updated: Date.now()
+        });
+    },
+    createCharacter: function(options) {
+        options = options || {};
+        if (! (typeof options.name === "string" && options.name.length )) {
+            throw new Meteor.Error(400, "Required parameter missing");
+        }
+        if (options.name.length > 100) {
+            throw new Meteor.Error(413, "Description too long");
+        }
+        if (! this.userId) {
+          throw new Meteor.Error(403, "You must be logged in");
+        }
 
-    return Characters.insert({
-      owner: this.userId,
-      name: options.name,
-      stats: [],
-      updated: Date.now()
-    });
-  }
-
+        return Characters.insert({
+            owner: this.userId,
+            name: options.name,
+            stats: [],
+            updated: Date.now()
+        });
+    },
+    setRole: function(options) {
+    }
 });
 
 ///////////////////////////////////////////////////////////////////////////////
