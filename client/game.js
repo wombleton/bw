@@ -1,5 +1,5 @@
 function getGame() {
-    return Games.findOne(Session.get('active'));
+    return Games.findOne(Session.get('game'));
 }
 Template.active.game = function() {
     return getGame();
@@ -16,6 +16,6 @@ Template.active.events({
     'click [data-role]': function(e) {
         var role = $(e.currentTarget).attr('data-role');
 
-        Meteor.call('setRole', Session.get('active'), role);
+        Meteor.call('setRole', Session.get('game'), role);
     }
 });

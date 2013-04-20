@@ -8,7 +8,7 @@ Meteor.subscribe("characters");
 
 // PAGE
 Template.page.active = function() {
-    return Games.findOne(Session.get('active'));
+    return Games.findOne(Session.get('game'));
 };
 
 // FOYER
@@ -18,7 +18,7 @@ Template.foyer.events({
         Session.set("showCreateGameDialog", true);
     },
     'click .game': function() {
-        Session.set('active', this._id);
+        Session.set('game', this._id);
     }
 });
 
@@ -47,7 +47,7 @@ Template.createGameDialog.events({
         description: description
       }, function (error, game) {
         if (!error) {
-          Session.set("active", game);
+          Session.set('game', game);
         }
       });
       Session.set("showCreateGameDialog", false);
