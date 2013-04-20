@@ -16,8 +16,8 @@
 </body>
 
 <template name="page">
-    {{#if active}}
-        {{> active}}
+    {{#if game}}
+        {{> game}}
     {{else}}
         {{> foyer}}
     {{/if}}
@@ -41,7 +41,7 @@
     <div class="row-fluid">
         <div class="span12">
             {{#each games}}
-                {{> game}}
+                {{> game-item}}
             {{/each}}
         </div>
     </div>
@@ -74,7 +74,7 @@
   </div>
 </template>
 
-<template name="game">
+<template name="game-item">
     <div class="game {{selected}}">
         <i class="icon-circle-arrow-right"></i>
         <span class="description">{{description}}</span>

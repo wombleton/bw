@@ -7,7 +7,7 @@ Meteor.subscribe("characters");
 ///////////////////////////////////////////////////////////////////////////////
 
 // PAGE
-Template.page.active = function() {
+Template.page.game = function() {
     return Games.findOne(Session.get('game'));
 };
 

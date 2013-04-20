@@ -1,9 +1,18 @@
-<template name="active">
+<template name="game">
     <div class="container-fluid">
         <div class="row-fluid">
             <h1>{{game.description}}</h1>
         </div>
         {{#if gm}}
+            {{> invites}}
+        {{else}}
+        quack
+        {{/if}}
+    </div>
+</template>
+
+<template name="invites">
+    {{#unless locked}}
         <div class="row-fluid">
             <p>
                 As the GM, you can invite new players to the game:
@@ -11,10 +20,6 @@
                     <input type="text" class="input-medium search-query" placeholder="Player name"/>
                 </form>
             </p>
-            <fo
         </div>
-        {{else}
-        quack
-        {{/if}}
-    </div>
+    {{/unless}}
 </template>
