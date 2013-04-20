@@ -1,7 +1,24 @@
 <template name="active">
     <div class="container-fluid">
         <div class="row-fluid">
-            <h1>{{description}}</h1>
+            <h1>{{game.description}}</h1>
         </div>
+        {{#if role 'gm'}}
+            GM
+        {{/if}}
+        {{#if role 'player'}}
+            GM
+        {{/if}}
+        {{#unless role}}
+            {{> decideRole}}
+        {{/unless}}
+    </div>
+</template>
+
+<template name="decideRole">
+    <div class="row-fluid">
+        <h3>In this game I am a...</h3>
+        <button data-role="gm" class="btn btn-large">GM</button>
+        <button data-role="player" class="btn btn-large">Player</button>
     </div>
 </template>
