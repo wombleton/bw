@@ -19,6 +19,11 @@ Template.foyer.events({
     },
     'click .game': function() {
         Session.set('game', this._id);
+    },
+    'click [data-action=join]': function(e) {
+        var code = $('[name=code]').val();
+        Meteor.call('joinGame', code);
+        return false;
     }
 });
 

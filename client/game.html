@@ -4,22 +4,20 @@
             <h1>{{game.description}}</h1>
         </div>
         {{#if gm}}
-            {{> invites}}
+            {{> lock}}
         {{else}}
         quack
         {{/if}}
     </div>
 </template>
 
-<template name="invites">
-    {{#unless locked}}
+<template name="lock">
+    {{#unless game.locked}}
         <div class="row-fluid">
             <p>
-                As the GM, you can invite new players to the game:
-                <form class="form-search">
-                    <input type="text" class="input-medium search-query" placeholder="Player name"/>
-                </form>
+            New players can join with the secret code <h2>{{game.code}}</h2>
             </p>
+            <button class="btn btn-warning">Lock Game</button>
         </div>
     {{/unless}}
 </template>

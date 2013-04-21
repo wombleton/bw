@@ -34,12 +34,21 @@
   <div class="container-fluid">
     <div class="row-fluid">
         <h3>Games</h3>
-        <div class="span12">
+        <div class="span6">
             <a class="btn btn-primary" data-action="new-game">New Game</a>
+        </div>
+        <div class="span5">
+            <form class="form-inline">
+            <label>
+                Join Game
+            </label>
+            <input type="text" class="input-medium" name="code" autocomplete="off" placeholder="SECRET CODE">
+            <button class="btn btn-primary" data-action="join">JOIN</button>
+            </form>
         </div>
     </div>
     <div class="row-fluid">
-        <div class="span12">
+        <div class="span6">
             {{#each games}}
                 {{> game-item}}
             {{/each}}

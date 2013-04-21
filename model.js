@@ -86,15 +86,56 @@ Meteor.methods({
         game = {
             owner: this.userId,
             description: options.description,
-            users: {},
+            gm: this.userId,
+            players: [],
             updated: Date.now()
         };
 
-        game.users[this.userId] = {
-            role: 'gm'
-        };
+        return Games.insert(game, function(err, id) {
+            var code;
 
-        return Games.insert(game);
+            if (!err) {
+                code = id.toUpperCase().replace(/[0OI1]/g, '');
+                code = code.substring(0, 3) + '-' + code.substring(3, 6);
+                Games.update(id, {
+                    $set: {
+                        code: code
+                    }
+                });
+            }
+        });
+    },
+    joinGame: function(code, callback) {
+        var game,
+            key = ['users'];
+
+        if (! this.userId) {
+            throw new Meteor.Error(403, "You must be logged in");
+        }
+        if (!_.isString(code)) {
+            throw new Meteor.Error(400, "Required code missing.");
+        }
+
+        game = Games.findOne({
+            code: code
+        });
+
+
+        if (!game) {
+            Session.set('gameNotFound', code);
+        } else if (game.gm === this.userId) {
+            Session.set('game', game._id);
+        } else {
+            Games.update(game._id, {
+                $addToSet: {
+                    players: this.userId
+                }
+            }, function(err) {
+                if (!err) {
+                    Session.set('game', game._id);
+                }
+            });
+        }
     },
     createCharacter: function(options) {
         options = options || {};
