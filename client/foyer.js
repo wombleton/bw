@@ -8,26 +8,12 @@ Meteor.subscribe("characters");
 
 // PAGE
 Template.page.game = function() {
-    return Games.findOne(Session.get('game'));
+    var user = Meteor.user();
+
+    return user && Games.findOne(user.game);
 };
 
-// FOYER
-Template.foyer.events({
-    'click [data-action=new-game]': function() {
-        Session.set("createError", null);
-        Session.set("showCreateGameDialog", true);
-    },
-    'click .game': function() {
-        Session.set('game', this._id);
-    },
-    'click [data-action=join]': function(e) {
-        var code = $('[name=code]').val();
-        Meteor.call('joinGame', code);
-        return false;
-    }
-});
-
-Template.foyer.games = function() {
+Template.gameList.games = function() {
     return Games.find({}, {
         sort: {
             updated: -1
@@ -35,30 +21,45 @@ Template.foyer.games = function() {
     });
 };
 
-Template.foyer.showCreateCharacterDialog = function() {
-    return Session.get('showCreateCharacterDialog');
+Template.gameList.canCreate = function() {
+    return Template.gameList.games().count() < 3;
+}
+
+Template.gameList.createGame = function(e, template) {
+    var name = template.find('input').value;
+
+    debugger;
+    e.preventDefault();
+
+    if (name.length) {
+        Meteor.call('createGame', {
+            description: name
+        }, function (err, game) {
+            if (!err) {
+                debugger;
+                Session.set('game', game);
+            }
+        });
+    } else {
+        Session.set("createError", "Games have to have descriptions.");
+    }
 };
 
-Template.foyer.showCreateGameDialog = function() {
-    return Session.get('showCreateGameDialog');
-};
+Template.gameList.events({
+    'click [type=submit]': Template.gameList.createGame,
+    'submit form': Template.gameList.createGame
+});
+
+// FOYER
+Template.foyer.events({
+    'click [data-action=join]': function(e) {
+        var code = $('[name=code]').val();
+        return false;
+    }
+});
 
 Template.createGameDialog.events({
   'click .save': function(event, template) {
-    var description = template.find(".description").value;
-
-    if (description.length) {
-      Meteor.call('createGame', {
-        description: description
-      }, function (error, game) {
-        if (!error) {
-          Session.set('game', game);
-        }
-      });
-      Session.set("showCreateGameDialog", false);
-    } else {
-      Session.set("createError", "Games have to have descriptions.");
-    }
   },
 
   'click .cancel': function () {

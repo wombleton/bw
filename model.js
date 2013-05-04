@@ -122,19 +122,16 @@ Meteor.methods({
 
 
         if (!game) {
-            Session.set('gameNotFound', code);
+            return 'gameNotFound';
         } else if (game.gm === this.userId) {
-            Session.set('game', game._id);
+            return game._id;
         } else {
             Games.update(game._id, {
                 $addToSet: {
                     players: this.userId
                 }
-            }, function(err) {
-                if (!err) {
-                    Session.set('game', game._id);
-                }
             });
+            return game._id;
         }
     },
     createCharacter: function(options) {

@@ -8,12 +8,23 @@
         <div class="navbar-inner">
             <div class="container-fluid">
                 <a class="brand" href="#">Hardholder</a>
+                <div class="nav-collapse collapse">
+                    {{>nav}}
+                </div>
                 <div class="pull-right">{{loginButtons}}</div>
             </div>
         </div>
     </div>
     {{>page}}
 </body>
+
+<template name="nav">
+    <ul class="nav">
+        <li>
+            <a href="/">Home</a>
+        </li>
+    </ul>
+</template>
 
 <template name="page">
     {{#if game}}
@@ -24,38 +35,41 @@
 </template>
 
 <template name="foyer">
-  {{#if showCreateGameDialog}}
-    {{> createGameDialog}}
-  {{/if}}
-  {{#if showCreateCharacterDialog}}
-    {{> createCharacterDialog}}
-  {{/if}}
-  {{#if currentUser}}
-  <div class="container-fluid">
-    <div class="row-fluid">
-        <h3>Games</h3>
-        <div class="span6">
-            <a class="btn btn-primary" data-action="new-game">New Game</a>
-        </div>
-        <div class="span5">
-            <form class="form-inline">
-            <label>
-                Join Game
-            </label>
-            <input type="text" class="input-medium" name="code" autocomplete="off" placeholder="SECRET CODE">
-            <button class="btn btn-primary" data-action="join">JOIN</button>
-            </form>
-        </div>
+    {{#if showCreateGameDialog}}
+        {{> createGameDialog}}
+    {{/if}}
+    <div class="container-fluid">
+        {{#if currentUser}}
+            {{>gameList}}
+        {{else}}
+            <div class="hero-unit">
+                <h1>Burning Wheel Tools</h1>
+                <p>Track characters, roll dice, <i>Fight!</i>, Duel of Wits and Range &amp; Cover.</p>
+                <p>Create an account to get started!</p>
+            </div>
+        {{/if}}
     </div>
+</template>
+
+<template name="gameList">
     <div class="row-fluid">
-        <div class="span6">
+        <div class="span12">
             {{#each games}}
                 {{> game-item}}
             {{/each}}
         </div>
     </div>
-  </div>
-  {{/if}}
+    {{#if canCreate}}
+        <div class="row-fluid">
+            <div class="span12 well">
+                <p>Create a new game</p>
+                <form class="form form-inline">
+                    <input type="text" placeholder="Name it">
+                    <button type="submit" class="btn">Go</button>
+                </form>
+            </div>
+        </div>
+    {{/if}}
 </template>
 
 <template name="createGameDialog">
