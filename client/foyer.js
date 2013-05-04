@@ -28,7 +28,6 @@ Template.gameList.canCreate = function() {
 Template.gameList.createGame = function(e, template) {
     var name = template.find('input').value;
 
-    debugger;
     e.preventDefault();
 
     if (name.length) {
@@ -36,7 +35,6 @@ Template.gameList.createGame = function(e, template) {
             description: name
         }, function (err, game) {
             if (!err) {
-                debugger;
                 Session.set('game', game);
             }
         });
@@ -50,23 +48,8 @@ Template.gameList.events({
     'submit form': Template.gameList.createGame
 });
 
-// FOYER
-Template.foyer.events({
-    'click [data-action=join]': function(e) {
-        var code = $('[name=code]').val();
-        return false;
+Template.gameItem.events({
+    'click': function(event, template) {
+        debugger;
     }
 });
-
-Template.createGameDialog.events({
-  'click .save': function(event, template) {
-  },
-
-  'click .cancel': function () {
-    Session.set("showCreateGameDialog", false);
-  }
-});
-
-Template.createGameDialog.error = function () {
-  return Session.get("createError");
-};

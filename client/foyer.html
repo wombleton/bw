@@ -52,13 +52,9 @@
 </template>
 
 <template name="gameList">
-    <div class="row-fluid">
-        <div class="span12">
-            {{#each games}}
-                {{> game-item}}
-            {{/each}}
-        </div>
-    </div>
+    {{#each games}}
+        {{> gameItem}}
+    {{/each}}
     {{#if canCreate}}
         <div class="row-fluid">
             <div class="span12 well">
@@ -72,34 +68,19 @@
     {{/if}}
 </template>
 
-<template name="createGameDialog">
-  <div class="mask"> </div>
-  <div class="modal">
-    <div class="modal-header">
-      <button type="button" class="close cancel">&times;</button>
-      <h3>Add game</h3>
-    </div>
-
-    <div class="modal-body">
-      {{#if error}}
-        <div class="alert alert-error">{{error}}</div>
-      {{/if}}
-
-      <label>Description</label>
-      <input type="text" class="description span5">
-
-    </div>
-
-    <div class="modal-footer">
-      <a href="#" class="btn cancel">Cancel</a>
-      <a href="#" class="btn btn-primary save">Add game</a>
-    </div>
-  </div>
-</template>
-
-<template name="game-item">
-    <div class="game {{selected}}">
-        <i class="icon-circle-arrow-right"></i>
-        <span class="description">{{description}}</span>
+<template name="gameItem">
+    <div class="row-fluid">
+        <div class="span12 well">
+            <div class="row-fluid">
+                <div class="span12">
+                    {{description}}
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="gm">
+                    {{gm}}
+                </div>
+            </div>
+        </div>
     </div>
 </template>
