@@ -1,13 +1,24 @@
-function getGame() {
-    var user = Meteor.user(),
-        id = user && user.game;
+Template.game.owner = function() {
+    return this.owner === Meteor.userId();
+};
 
-    return id ? Games.findOne(id) : false;
+Template.game.player = function() {
+    var userId = Meteor.userId();
+
+    return _.find(this.players, function(player) {
+        return player.id === userId;
+    });
+};
+
+Template.game.character = function() {
+    var player = Template.game.player();
+
+    return player && player.character;
 }
 
-Template.game.gm = function() {
-    var game = getGame(),
-        userId = Meteor.userId();
-
-    return game.gm === userId;
-};
+Template.game.events({
+    'click button': function() {
+        Game.
+        Meteor.call('setupCharacter', Meteor.userId());
+    }
+});
