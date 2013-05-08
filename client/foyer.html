@@ -20,15 +20,17 @@
 
 <template name="nav">
     <ul class="nav">
-        <li>
-            <a href="/">Home</a>
-        </li>
+        {{#if game }}
+            <li>
+                <a href="/">Home</a>
+            </li>
+        {{/if}}
     </ul>
 </template>
 
 <template name="page">
     {{#if game}}
-        {{> game}}
+        {{> game game}}
     {{else}}
         {{> foyer}}
     {{/if}}
@@ -53,12 +55,23 @@
         {{> gameItem}}
     {{/each}}
     {{#if canCreate}}
-        <div class="row-fluid">
+        <div class="row-fluid create">
             <div class="span12 well">
                 <p>Create a new game</p>
                 <form class="form form-inline">
                     <input type="text" placeholder="Name it">
                     <button type="submit" class="btn">Go</button>
+                </form>
+            </div>
+        </div>
+    {{/if}}
+    {{#if canJoin}}
+        <div class="row-fluid join">
+            <div class="span12 well">
+                <p>Join an existing game</p>
+                <form class="form form-inline">
+                    <input type="text" placeholder="Secret code">
+                    <button type="submit" class="btn">Join</button>
                 </form>
             </div>
         </div>
@@ -76,19 +89,20 @@
                 </div>
             </div>
             <div class="row-fluid">
-                <div class="gm">
+                {{#if owner}}
+                <div class="label label-info">Invite code: {{code}}</div>
+                {{/if}}
+                <div class="gm inline-block">
                     <div class="label label-important">GM</div>
                     {{gm.name}}
                 </div>
-            </div>
-            {{#each player}}
-                <div class="row-fluid">
-                    <div class="gm">
-                        <div class="label">GM</div>
-                        {{gm.name}}
+                {{#each players}}
+                    <div class="player inline-block">
+                        <div class="label label-info">Player</div>
+                        {{name}}
                     </div>
-                </div>
-            {{/each}}
+                {{/each}}
+            </div>
         </div>
     </div>
 </template>
