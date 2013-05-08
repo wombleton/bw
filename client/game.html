@@ -1,23 +1,7 @@
 <template name="game">
     <div class="container-fluid">
         <div class="row-fluid">
-            <h1>{{game.description}}</h1>
+            <h1>{{game.name}}</h1>
         </div>
-        {{#if gm}}
-            {{> lock}}
-        {{else}}
-        quack
-        {{/if}}
     </div>
-</template>
-
-<template name="lock">
-    {{#unless game.locked}}
-        <div class="row-fluid">
-            <p>
-            New players can join with the secret code <h2>{{game.code}}</h2>
-            </p>
-            <button class="btn btn-warning">Lock Game</button>
-        </div>
-    {{/unless}}
 </template>

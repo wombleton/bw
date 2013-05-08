@@ -1,14 +1,9 @@
 function getGame() {
-    return Games.findOne(Session.get('game'));
+    var user = Meteor.user(),
+        id = user && user.game;
+
+    return id ? Games.findOne(id) : false;
 }
-
-Template.game.game = function() {
-    return getGame();
-};
-
-Template.lock.game = function() {
-    return getGame();
-};
 
 Template.game.gm = function() {
     var game = getGame(),
