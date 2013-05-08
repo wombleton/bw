@@ -40,7 +40,7 @@ Meteor.methods({
             }
         });
     },
-    joinGame: function(code, callback) {
+    joinGame: function(code) {
         var game,
             key = ['users'];
 
@@ -55,7 +55,6 @@ Meteor.methods({
             code: code
         });
 
-
         if (!game) {
             return 'gameNotFound';
         } else if (game.gm === this.userId) {
@@ -63,7 +62,10 @@ Meteor.methods({
         } else {
             Games.update(game._id, {
                 $addToSet: {
-                    players: this.userId
+                    players: {
+                        id: this.userId,
+                        name: Meteor.users.displayName(Meteor.user())
+                    }
                 }
             });
             return game._id;
