@@ -14,7 +14,7 @@ Meteor.publish("games", function() {
     return Games.find({
         $or: [
             {
-                players: this.userId
+                'players.id': this.userId
             },
             {
                 owner: this.userId
