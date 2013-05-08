@@ -35,16 +35,13 @@
 </template>
 
 <template name="foyer">
-    {{#if showCreateGameDialog}}
-        {{> createGameDialog}}
-    {{/if}}
     <div class="container-fluid">
         {{#if currentUser}}
             {{>gameList}}
         {{else}}
             <div class="hero-unit">
-                <h1>Burning Wheel Tools</h1>
-                <p>Track characters, roll dice, <i>Fight!</i>, Duel of Wits and Range &amp; Cover.</p>
+                <h1>Hardholder</h1>
+                <p>Play <a href="http://burningwheel.com">Burning Wheel</a> in the browser &mdash; track characters, roll dice, <i>Fight!</i>, Duel of Wits and Range &amp; Cover.</p>
                 <p>Create an account to get started!</p>
             </div>
         {{/if}}
@@ -73,14 +70,25 @@
         <div class="span12 well">
             <div class="row-fluid">
                 <div class="span12">
-                    {{description}}
+                    <blockquote>
+                        {{name}}
+                    </blockquote>
                 </div>
             </div>
             <div class="row-fluid">
                 <div class="gm">
-                    {{gm}}
+                    <div class="label label-important">GM</div>
+                    {{gm.name}}
                 </div>
             </div>
+            {{#each player}}
+                <div class="row-fluid">
+                    <div class="gm">
+                        <div class="label">GM</div>
+                        {{gm.name}}
+                    </div>
+                </div>
+            {{/each}}
         </div>
     </div>
 </template>

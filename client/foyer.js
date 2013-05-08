@@ -7,12 +7,6 @@ Meteor.subscribe("characters");
 ///////////////////////////////////////////////////////////////////////////////
 
 // PAGE
-Template.page.game = function() {
-    var user = Meteor.user();
-
-    return user && Games.findOne(user.game);
-};
-
 Template.gameList.games = function() {
     return Games.find({}, {
         sort: {
@@ -32,11 +26,7 @@ Template.gameList.createGame = function(e, template) {
 
     if (name.length) {
         Meteor.call('createGame', {
-            description: name
-        }, function (err, game) {
-            if (!err) {
-                Session.set('game', game);
-            }
+            name: name
         });
     } else {
         Session.set("createError", "Games have to have descriptions.");
@@ -50,6 +40,11 @@ Template.gameList.events({
 
 Template.gameItem.events({
     'click': function(event, template) {
-        debugger;
+        var game = template.data;
+        Meteor.users.update(Meteor.userId(), {
+            $set: {
+                game: game._id
+            }
+        });
     }
 });
