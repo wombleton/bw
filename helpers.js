@@ -33,4 +33,8 @@ if (Meteor.isClient) {
             return null;
         }
     });
+
+    Handlebars.registerHelper('selected', function(a, b) {
+      return a === b ? ' selected' : '';
+    });
 }

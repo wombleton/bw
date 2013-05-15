@@ -1,37 +1,45 @@
-function setName(id, name) {
-    Characters.update(id, {
+function setName(model, template) {
+    Characters.update(model.id, {
         $set: {
-            name: name
+            name: template.find('[type=text]').value
         }
     });
+    Session.set('setCharacterName', false);
 }
 
 Template.sheet.events({
-    'click button': function(e) {
-        var row = $(e.currentTarget).parents('.row-fluid'),
-            show = !Session.get('setCharacterName');
+    'click button': function(e, template) {
+        var show = !Session.get('setCharacterName');
 
         Session.set('setCharacterName', show);
-        if (show) {
-            setTimeout(function() {
-                row.find('input[type=text]').focus();
-            }, 0);
-        } else {
-            setName(this._id, row.find('input[type=text]').val());
+
+        if (!show) {
+            setName(this, template);
         }
     },
-    'blur input': function(e) {
-        setName(this._id, $(e.currentTarget).parents('.row-fluid').find('input[type=text]').val());
-        Session.set('setCharacterName', false);
+    'blur input': function(e, template) {
+        setName(this, template);
     },
-    'keyup input': function(e) {
+    'keyup input': function(e, template) {
         if (e.keyCode === 13) {
-            setName(this._id, $(e.currentTarget).parents('.row-fluid').find('input[type=text]').val());
-            Session.set('setCharacterName', false);
+            setName(this, template);
         }
     }
 });
 
 Template.sheet.setCharacterName = function() {
     return Session.get('setCharacterName');
+};
+
+Template.stat.events({
+    'click tr': function() {
+        Session.set('updateStat', this.label);
+    },
+    'click button': function() {
+        Session.set('updateStat', undefined);
+        return false;
+    }
+});
+Template.stat.editable = function() {
+    return Session.get('updateStat') === this.label;
 };
