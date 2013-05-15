@@ -35,6 +35,6 @@ if (Meteor.isClient) {
     });
 
     Handlebars.registerHelper('selected', function(a, b) {
-      return a === b ? ' selected' : '';
+      return String(a) === String(b) ? ' selected' : '';
     });
 }
