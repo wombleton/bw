@@ -10,7 +10,7 @@
                     No name
                 {{/if}}
             {{/if}}
-            <button class="btn btn-small">
+            <button data-action="setname" class="btn btn-small">
                 <i class="icon-cog"></i>
             </button>
         </div>
@@ -48,31 +48,35 @@
         </td>
         <td>
             {{#if editable}}
-                <form class="form-inline mb0">
-                    <select name="shade" class="span1" value="{{shade}}">
-                        <option {{selected shade 'G'}} value="G">G</option>
-                        <option {{selected shade 'B'}} value="B">B</option>
-                        <option {{selected shade 'W'}} value="W">W</option>
-                    </select>
-                    <select name="exponent" class="span1" value="{{exponent}}">
-                        <option {{selected exponent 1}} value="1">1</option>
-                        <option {{selected exponent 2}} value="2">2</option>
-                        <option {{selected exponent 3}} value="3">3</option>
-                        <option {{selected exponent 4}} value="4">4</option>
-                        <option {{selected exponent 5}} value="5">5</option>
-                        <option {{selected exponent 6}} value="6">6</option>
-                        <option {{selected exponent 7}} value="7">7</option>
-                        <option {{selected exponent 8}} value="8">8</option>
-                        <option {{selected exponent 9}} value="9">9</option>
-                        <option {{selected exponent 10}} value="10">10</option>
-                    </select>
-                    <button class="btn btn-primary">
-                        <i class="icon-ok"></i>
-                    </button>
-                </form>
+                {{>editableStat}}
             {{else}}
                 {{shade}}{{exponent}}
             {{/if}}
         </td>
     </tr>
+</template>
+
+<template name="editableStat">
+    <div class="form-inline mb0">
+        <select name="shade" class="span1">
+            <option {{selected shade 'B'}} value="B">B</option>
+            <option {{selected shade 'G'}} value="G">G</option>
+            <option {{selected shade 'W'}} value="W">W</option>
+        </select>
+        <select name="exponent" class="span1">
+            <option {{selected exponent 1}} value="1">1</option>
+            <option {{selected exponent 2}} value="2">2</option>
+            <option {{selected exponent 3}} value="3">3</option>
+            <option {{selected exponent 4}} value="4">4</option>
+            <option {{selected exponent 5}} value="5">5</option>
+            <option {{selected exponent 6}} value="6">6</option>
+            <option {{selected exponent 7}} value="7">7</option>
+            <option {{selected exponent 8}} value="8">8</option>
+            <option {{selected exponent 9}} value="9">9</option>
+            <option {{selected exponent 10}} value="10">10</option>
+        </select>
+        <button data-action="setstat" class="btn btn-primary">
+            <i class="icon-ok"></i>
+        </button>
+    </div>
 </template>

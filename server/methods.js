@@ -90,6 +90,33 @@ Meteor.methods({
         _.extend(char, _.pick(options, 'stats'));
 
         return Characters.insert(char);
+    },
+    updateStat: function(options) {
+        var character,
+            stat,
+            statIndex,
+            update = {};
+
+        if (!this.userId) {
+            throw new Meteor.Error(403, "You must be logged in");
+        }
+        options = _.pick(options, 'characterId', 'label', 'shade', 'exponent');
+        if (_.keys(options).length < 4) {
+            throw new Meteor.Error(403, "Missing one of characterId, label, shade, exponent");
+        }
+
+        character = Characters.findOne(options.characterId);
+        stat = _.find(character.stats, function(stat) {
+            return stat.label === options.label;
+        });
+        statIndex = _.indexOf(character.stats, stat);
+
+        update['stats.' + statIndex + '.shade'] = options.shade;
+        update['stats.' + statIndex + '.exponent'] = options.exponent;
+
+        Characters.update(options.characterId, {
+            $set: update
+        });
     }
 });
 

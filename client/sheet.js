@@ -1,5 +1,5 @@
 function setName(model, template) {
-    Characters.update(model.id, {
+    Characters.update(model._id, {
         $set: {
             name: template.find('[type=text]').value
         }
@@ -8,7 +8,7 @@ function setName(model, template) {
 }
 
 Template.sheet.events({
-    'click button': function(e, template) {
+    'click [data-action=setname]': function(e, template) {
         var show = !Session.get('setCharacterName');
 
         Session.set('setCharacterName', show);
@@ -16,6 +16,16 @@ Template.sheet.events({
         if (!show) {
             setName(this, template);
         }
+    },
+    'click [data-action=setstat]': function(e, template) {
+        Meteor.call('updateStat', {
+            characterId: template.data._id,
+            label: this.label,
+            shade: template.find('[name=shade]').value,
+            exponent: template.find('[name=exponent]').value
+        });
+        Session.set('updateStat', undefined);
+        return false;
     },
     'blur input': function(e, template) {
         setName(this, template);
@@ -34,10 +44,6 @@ Template.sheet.setCharacterName = function() {
 Template.stat.events({
     'click tr': function() {
         Session.set('updateStat', this.label);
-    },
-    'click button': function() {
-        Session.set('updateStat', undefined);
-        return false;
     }
 });
 Template.stat.editable = function() {
