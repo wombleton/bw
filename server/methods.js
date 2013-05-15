@@ -72,23 +72,24 @@ Meteor.methods({
         }
     },
     createCharacter: function(options) {
+        var char;
+
         options = options || {};
-        if (! (typeof options.name === "string" && options.name.length )) {
-            throw new Meteor.Error(400, "Required parameter missing");
-        }
-        if (options.name.length > 100) {
-            throw new Meteor.Error(413, "Description too long");
+        if (!options.gameId) {
+            throw new Meteor.Error(413, "Must have a gameId");
         }
         if (! this.userId) {
           throw new Meteor.Error(403, "You must be logged in");
         }
 
-        return Characters.insert({
+        char = {
             owner: this.userId,
-            name: options.name,
-            stats: [],
-            updated: Date.now()
-        });
+            gameId: options.gameId,
+        };
+
+        _.extend(char, _.pick(options, 'stats'));
+
+        return Characters.insert(char);
     }
 });
 
