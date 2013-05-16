@@ -27,6 +27,11 @@ Template.sheet.events({
         Session.set('updateStat', undefined);
         return false;
     },
+    'click [data-action=add-stat]': function(e, template) {
+        var show = !Session.get('addStat');
+
+        Session.set('addStat', show);
+    },
     'blur [name=name]': function(e, template) {
         setName(this, template);
     },
@@ -36,6 +41,10 @@ Template.sheet.events({
         }
     }
 });
+
+Template.sheet.addStat = function() {
+    return Session.get('addStat');
+};
 
 Template.sheet.setCharacterName = function() {
     return Session.get('setCharacterName');
