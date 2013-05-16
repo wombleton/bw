@@ -27,10 +27,10 @@ Template.sheet.events({
         Session.set('updateStat', undefined);
         return false;
     },
-    'blur input': function(e, template) {
+    'blur [name=name]': function(e, template) {
         setName(this, template);
     },
-    'keyup input': function(e, template) {
+    'keyup [name=name]': function(e, template) {
         if (e.keyCode === 13) {
             setName(this, template);
         }

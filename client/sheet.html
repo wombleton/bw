@@ -2,7 +2,7 @@
     <div class="row-fluid">
         <div class="span12">
             {{#if setCharacterName}}
-                <input type="text" class="mb0" value="{{name}}" autofocus="autofocus">
+                <input type="text" class="mb0" name="name" value="{{name}}" autofocus="autofocus">
             {{else}}
                 {{#if name}}
                     {{name}}
@@ -30,9 +30,13 @@
                 <tfoot>
                     <tr>
                         <td colspan="2">
-                            <button class="btn btn-mini btn-primary">
-                                <i class="icon-plus"></i>
-                            </button>
+                            <div class="form-inline mb0">
+                                <input type="text" name="new-stat" data-provide="typeahead" data-source='["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Dakota","North Carolina","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"]' autocomplete="off">
+                                {{>editableStat}}
+                                <button class="btn btn-primary">
+                                    <i class="icon-plus"></i>
+                                </button>
+                            </div>
                         </td>
                     </tr>
                 </tfoot>
@@ -48,7 +52,12 @@
         </td>
         <td>
             {{#if editable}}
-                {{>editableStat}}
+                <div class="form-inline mb0">
+                    {{>editableStat}}
+                    <button data-action="setstat" class="btn btn-primary">
+                        <i class="icon-ok"></i>
+                    </button>
+                </div>
             {{else}}
                 {{shade}}{{exponent}}
             {{/if}}
@@ -57,26 +66,25 @@
 </template>
 
 <template name="editableStat">
-    <div class="form-inline mb0">
-        <select name="shade" class="span1">
-            <option {{selected shade 'B'}} value="B">B</option>
-            <option {{selected shade 'G'}} value="G">G</option>
-            <option {{selected shade 'W'}} value="W">W</option>
-        </select>
-        <select name="exponent" class="span1">
-            <option {{selected exponent 1}} value="1">1</option>
-            <option {{selected exponent 2}} value="2">2</option>
-            <option {{selected exponent 3}} value="3">3</option>
-            <option {{selected exponent 4}} value="4">4</option>
-            <option {{selected exponent 5}} value="5">5</option>
-            <option {{selected exponent 6}} value="6">6</option>
-            <option {{selected exponent 7}} value="7">7</option>
-            <option {{selected exponent 8}} value="8">8</option>
-            <option {{selected exponent 9}} value="9">9</option>
-            <option {{selected exponent 10}} value="10">10</option>
-        </select>
-        <button data-action="setstat" class="btn btn-primary">
-            <i class="icon-ok"></i>
-        </button>
-    </div>
+    <label class="checkbox">
+        <input type="checkbox" name="beginner">
+        Beginner
+    </label>
+    <select name="shade" class="span1">
+        <option {{selected shade 'B'}} value="B">B</option>
+        <option {{selected shade 'G'}} value="G">G</option>
+        <option {{selected shade 'W'}} value="W">W</option>
+    </select>
+    <select name="exponent" class="span1">
+        <option {{selected exponent 1}} value="1">1</option>
+        <option {{selected exponent 2}} value="2">2</option>
+        <option {{selected exponent 3}} value="3">3</option>
+        <option {{selected exponent 4}} value="4">4</option>
+        <option {{selected exponent 5}} value="5">5</option>
+        <option {{selected exponent 6}} value="6">6</option>
+        <option {{selected exponent 7}} value="7">7</option>
+        <option {{selected exponent 8}} value="8">8</option>
+        <option {{selected exponent 9}} value="9">9</option>
+        <option {{selected exponent 10}} value="10">10</option>
+    </select>
 </template>
