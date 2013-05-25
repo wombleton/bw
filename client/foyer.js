@@ -2,7 +2,7 @@
 
 Meteor.subscribe("directory");
 Meteor.subscribe("games");
-Meteor.subscribe("characters");
+Meteor.subscribe("skills");
 
 ///////////////////////////////////////////////////////////////////////////////
 

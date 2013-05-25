@@ -10,9 +10,10 @@
                 {{name}}
             </h3>
         </div>
+        {{#each sheets}}
+            {{>sheet}}
+        {{/each}}
         <div class="row-fluid">
-            <h4>Character Sheet</h4>
-            {{>sheet pc}}
         </div>
     </div>
 </template>

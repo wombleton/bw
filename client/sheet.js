@@ -27,10 +27,21 @@ Template.sheet.events({
         Session.set('updateStat', undefined);
         return false;
     },
+    'click [data-action=done]': function(e, template) {
+        Session.set('addStat', false);
+        return false
+    },
     'click [data-action=add-stat]': function(e, template) {
-        var show = !Session.get('addStat');
-
-        Session.set('addStat', show);
+        if (Session.get('addStat')) {
+            Meteor.call('addStat', {
+                characterId: template.data._id,
+                label: template.find('[name=new-stat]').value
+            });
+            template.find('[name=new-stat]').value = '';
+        } else {
+            Session.set('addStat', true);
+            return false;
+        }
     },
     'blur [name=name]': function(e, template) {
         setName(this, template);
@@ -42,6 +53,10 @@ Template.sheet.events({
     }
 });
 
+Template.sheet.statList = function() {
+    return JSON.stringify(Skills.find({}).map(function (x) { return x.name; })).replace(/"/g, '&quot;');
+};
+
 Template.sheet.addStat = function() {
     return Session.get('addStat');
 };
@@ -49,10 +64,15 @@ Template.sheet.addStat = function() {
 Template.sheet.setCharacterName = function() {
     return Session.get('setCharacterName');
 };
+Template.sheet.owner = function() {
+    return this.owner === Meteor.userId();
+};
 
 Template.stat.events({
-    'click tr': function() {
-        Session.set('updateStat', this.label);
+    'click': function() {
+        if (this.owner === Meteor.userId()) {
+            Session.set('updateStat', this.label);
+        }
     }
 });
 Template.stat.editable = function() {

@@ -23,8 +23,12 @@ Meteor.publish("games", function() {
     });
 });
 
-Meteor.publish("characters", function() {
+Meteor.publish("characters", function(gameId) {
     return Characters.find({
-        owner: this.userId
+        gameId: gameId
     });
+});
+
+Meteor.publish("skills", function() {
+    return Skills.find();
 });

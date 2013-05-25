@@ -1,3 +1,43 @@
+function getStat(character, label) {
+    return _.find(character.stats, function(stat) {
+        return stat.label === label;
+    });
+}
+
+function getUpdate(character, skill) {
+    var exponent,
+        roots,
+        update;
+
+    update = {
+        label: skill.name,
+        magic: skill.magic,
+        training: skill.training
+    };
+
+    roots = _.compact(_.map(skill.roots, function(root) {
+        return getStat(character, root);
+    }));
+
+    if (roots.length < skill.roots.length) {
+        update.shade = 'B';
+        update.exponent = 1;
+    } else {
+        update.shade = _.reduce(_.pluck(roots, 'shade'), function(memo, s) { return s < memo ? s : memo }, 'W');
+        exponent = _.reduce(roots, function(memo, root) {
+            var exponent = Number(root.exponent);
+
+            if (root.shade > update.shade) {
+                exponent += 2;
+            }
+            return memo + exponent;
+        }, 0);
+
+        update.exponent = Math.floor(exponent /  (2 * roots.length));
+    }
+    return update;
+}
+
 Meteor.methods({
     // options should include: name
     createGame: function (options) {
@@ -68,6 +108,17 @@ Meteor.methods({
                     }
                 }
             });
+            Meteor.call('createCharacter', {
+                gameId: game._id,
+                stats: [
+                    { label: 'Wi', shade: 'B', stat: true, exponent: 3 },
+                    { label: 'Pe', shade: 'B', stat: true, exponent: 3 },
+                    { label: 'Ag', shade: 'B', stat: true, exponent: 3 },
+                    { label: 'Sp', shade: 'B', stat: true, exponent: 3 },
+                    { label: 'Po', shade: 'B', stat: true, exponent: 3 },
+                    { label: 'Fo', shade: 'B', stat: true, exponent: 3 }
+                ]
+            });
             return game._id;
         }
     },
@@ -85,6 +136,7 @@ Meteor.methods({
         char = {
             owner: this.userId,
             gameId: options.gameId,
+            skills: []
         };
 
         _.extend(char, _.pick(options, 'stats'));
@@ -106,18 +158,45 @@ Meteor.methods({
         }
 
         character = Characters.findOne(options.characterId);
-        stat = _.find(character.stats, function(stat) {
-            return stat.label === options.label;
-        });
+        stat = getStat(character, options.label)
+
         statIndex = _.indexOf(character.stats, stat);
 
-        update['stats.' + statIndex + '.shade'] = options.shade;
-        update['stats.' + statIndex + '.exponent'] = options.exponent;
+        update[(stat.stat ? 'stats.' : 'skills.') + statIndex + '.shade'] = options.shade;
+        update[(stat.stat ? 'stats.' : 'skills.') + statIndex + '.exponent'] = options.exponent;
 
         Characters.update(options.characterId, {
             $set: update
         });
+    },
+    addStat: function(options) {
+        var character,
+            skill,
+            update;
+
+        if (!this.userId) {
+            throw new Meteor.Error(403, "You must be logged in");
+        }
+        options = _.pick(options, 'characterId', 'label');
+        if (_.keys(options).length < 2) {
+            throw new Meteor.Error(403, "Missing one of characterId, label");
+        }
+
+        character = Characters.findOne(options.characterId);
+
+        if (getStat(character, options.label)) {
+            return;
+        }
+
+        skill = Skills.findOne({
+            name: options.label
+        });
+        update = getUpdate(character, skill);
+
+        Characters.update(options.characterId, {
+            $push: {
+                'skills': update
+            }
+        });
     }
 });
-
-

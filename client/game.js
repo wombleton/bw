@@ -9,3 +9,11 @@ Template.game.player = function() {
         return player.id === userId;
     });
 };
+
+Template.game.sheets = function() {
+    debugger;
+    Meteor.subscribe("characters", this._id);
+    return Characters.find({
+        gameId: this._id
+    });
+};
