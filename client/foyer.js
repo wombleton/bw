@@ -42,7 +42,7 @@ Template.gameList.canCreate = function() {
 }
 
 Template.gameList.createGame = function(e, template) {
-    var name = template.find('input').value;
+    var name = template.find('[name=create]').value;
 
     e.preventDefault();
 
@@ -56,12 +56,13 @@ Template.gameList.createGame = function(e, template) {
 };
 
 Template.gameList.joinGame = function(e, template) {
-    var code = template.find('input').value;
+    var code = template.find('[name=join]').value;
 
     e.preventDefault();
 
     if (code.length) {
         Meteor.call('joinGame', code);
+        template.find('[name=join]').value = '';
     } else {
         Session.set("createError", "Games have to have descriptions.");
     }

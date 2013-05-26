@@ -1,7 +1,14 @@
-function getStat(character, label) {
-    return _.find(character.stats, function(stat) {
+function getStat(character, label, stat) {
+    if (stat === undefined) {
+        stat = true;
+    }
+    return _.find(character[stat ? 'stats' : 'skills'], function(stat) {
         return stat.label === label;
     });
+}
+
+function getSkill(character, label) {
+    return getStat(character, label, false);
 }
 
 function getUpdate(character, skill) {
@@ -158,7 +165,7 @@ Meteor.methods({
         }
 
         character = Characters.findOne(options.characterId);
-        stat = getStat(character, options.label)
+        stat = getStat(character, options.label, options.stat)
 
         statIndex = _.indexOf(character.stats, stat);
 
@@ -169,7 +176,7 @@ Meteor.methods({
             $set: update
         });
     },
-    addStat: function(options) {
+    addSkill: function(options) {
         var character,
             skill,
             update;
@@ -184,7 +191,7 @@ Meteor.methods({
 
         character = Characters.findOne(options.characterId);
 
-        if (getStat(character, options.label)) {
+        if (getSkill(character, options.label, true)) {
             return;
         }
 
