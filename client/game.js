@@ -12,7 +12,26 @@ Template.game.player = function() {
 
 Template.game.sheets = function() {
     Meteor.subscribe("characters", this._id);
-    return Characters.find({
+    return sheets = Characters.find({
         gameId: this._id
+    }).map(function(c) {
+        c.stats = _.map(c.stats, function(stat) {
+            stat.slug = stat.label + ':' + c._id;
+
+            return stat;
+        });
+
+        return c;
     });
+};
+
+Template.game.events = {
+    'click [data-action=add-sheet]': function(e, template) {
+        if (Meteor.userId() === this.owner) {
+            Meteor.call('createCharacter', {
+                gameId: this._id,
+                stats: []
+            });
+        }
+    }
 };

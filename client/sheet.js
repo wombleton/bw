@@ -4,7 +4,7 @@ function setName(model, template) {
             name: template.find('[type=text]').value
         }
     });
-    Session.set('setCharacterName', false);
+    Session.set('setCharacterName', undefined);
 }
 
 function addSkill(e, template) {
@@ -17,26 +17,26 @@ function addSkill(e, template) {
 
 Template.sheet.events({
     'click [data-action=setname]': function(e, template) {
-        var show = !Session.get('setCharacterName');
-
-        Session.set('setCharacterName', show);
-
-        if (!show) {
+        if (this._id === Session.get('setCharacterName')) {
             setName(this, template);
+        } else {
+            Session.set('setCharacterName', this._id);
         }
+
     },
     'click [data-action=setstat]': function(e, template) {
-        Meteor.call('updateStat', {
+        Meteor.call('updateSkill', {
             characterId: template.data._id,
             label: this.label,
             shade: template.find('[name=shade]').value,
-            exponent: template.find('[name=exponent]').value
+            exponent: template.find('[name=exponent]').value,
+            stat: !!this.stat
         });
-        Session.set('updateStat', undefined);
+        Session.set('updateSkill', undefined);
         return false;
     },
     'click [data-action=done]': function(e, template) {
-        Session.set('addSkill', false);
+        Session.set('addSkill', undefined);
         return false
     },
     'keyup [name=new-skill]': function(e, template) {
@@ -46,10 +46,10 @@ Template.sheet.events({
         }
     },
     'click [data-action=add-skill]': function(e, template) {
-        if (Session.get('addSkill')) {
+        if (Session.get('addSkill') === this._id) {
             addSkill(e, template);
         } else {
-            Session.set('addSkill', true);
+            Session.set('addSkill', this._id);
             return false;
         }
     },
@@ -60,6 +60,11 @@ Template.sheet.events({
         if (e.keyCode === 13) {
             setName(this, template);
         }
+    },
+    'click .stat': function(e, template) {
+        if (template.data.owner === Meteor.userId() && !this.training) {
+            Session.set('updateSkill', this.slug);
+        }
     }
 });
 
@@ -68,23 +73,34 @@ Template.sheet.statList = function() {
 };
 
 Template.sheet.addSkill = function() {
-    return Session.get('addSkill');
+    return Session.get('addSkill') === this._id;
 };
 
 Template.sheet.setCharacterName = function() {
-    return Session.get('setCharacterName');
+    return Session.get('setCharacterName') === this._id;
 };
+
 Template.sheet.owner = function() {
     return this.owner === Meteor.userId();
 };
 
-Template.stat.events({
-    'click': function() {
-        if (this.owner === Meteor.userId()) {
-            Session.set('updateStat', this.label);
-        }
-    }
-});
-Template.stat.editable = function() {
-    return Session.get('updateStat') === this.label;
+Template.sheet.stats = function() {
+    return _.filter(this.stats, function(stat) {
+        return stat.stat;
+    });
+}
+Template.sheet.skills = function() {
+    return _.sortBy(_.filter(this.stats, function(stat) {
+        return !stat.stat && !stat.beginner;
+    }), 'label');
+}
+
+Template.sheet.learning = function() {
+    return _.filter(this.stats, function(stat) {
+        return !stat.stat && stat.beginner;
+    });
+}
+
+Template.stat.editable = function(e, template) {
+    return Session.get('updateSkill') === this.slug;
 };

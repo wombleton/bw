@@ -1,80 +1,96 @@
 <template name="sheet">
-    <div class="row-fluid">
-        <div class="span12">
-            {{#if setCharacterName}}
-                <input type="text" class="mb0" name="name" value="{{name}}" autofocus="autofocus">
-            {{else}}
-                {{#if name}}
-                    {{name}}
+    <div class="well">
+        <div class="row-fluid">
+            <div class="span12">
+                {{#if setCharacterName}}
+                    <input type="text" class="mb0" name="name" value="{{name}}" autofocus="autofocus">
                 {{else}}
-                    No name
+                    {{#if name}}
+                        {{name}}
+                    {{else}}
+                        No name
+                    {{/if}}
                 {{/if}}
-            {{/if}}
-            {{#if owner}}
-                <button data-action="setname" class="btn btn-small">
-                    <i class="icon-cog"></i>
-                </button>
-            {{/if}}
-        </div>
-    </div>
-    <div class="row-fluid">
-        <div class="span12{{#if owner}} owner{{/if}}">
-            {{#each stats}}
-                {{>stat}}
-            {{/each}}
-        </div>
-    </div>
-    <div class="row-fluid">
-        <div class="span12{{#if owner}} owner{{/if}}">
-            {{#each skills}}
-                {{>stat}}
-            {{/each}}
-            {{#if owner}}
-            <div class="form-inline">
-                {{#if addSkill}}
-                    <input type="text" name="new-skill" data-provide="typeahead" data-source="{{{statList}}}" autocomplete="off" autofocus="autofocus">
-                    <button data-action="add-skill" class="btn btn-primary">
-                        <i class="icon-plus"></i>
+                {{#if owner}}
+                    <button data-action="setname" class="btn btn-small">
+                        <i class="icon-cog"></i>
                     </button>
-                    <a data-action="done""btn" href>Done</a>
-                {{else}}
-                    <a data-action="add-skill" href>Add skill</a>
                 {{/if}}
             </div>
-            {{/if}}
         </div>
+        {{#if stats}}
+        <div class="row-fluid">
+            <div class="span12{{#if owner}} owner{{/if}}">
+                {{#each stats}}
+                    {{>stat}}
+                {{/each}}
+            </div>
+        </div>
+        {{/if}}
+        {{#if skills}}
+        <div class="row-fluid">
+            <div class="span12{{#if owner}} owner{{/if}}">
+                {{#each skills}}
+                    {{>stat}}
+                {{/each}}
+            </div>
+        </div>
+        {{/if}}
+        {{#if learning}}
+        <div class="row-fluid">
+            <div class="span12{{#if owner}} owner{{/if}}">
+                {{#each learning}}
+                    {{>stat}}
+                {{/each}}
+            </div>
+        </div>
+        {{/if}}
+        {{#if owner}}
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="form-inline">
+                        {{#if addSkill}}
+                            <input type="text" name="new-skill" data-provide="typeahead" data-source="{{{statList}}}" autocomplete="off" autofocus="autofocus">
+                            <button data-action="add-skill" class="btn btn-primary">
+                                <i class="icon-plus"></i>
+                            </button>
+                            <a data-action="done""btn" href>Done</a>
+                        {{else}}
+                            <a data-action="add-skill" href>Add skill</a>
+                        {{/if}}
+                    </div>
+                </div>
+        </div>
+        {{/if}}
     </div>
 </template>
 
 <template name="stat">
-<div class="stat">
+    <div class="stat">
         <b>{{label}}</b>
+        {{#if training}}
+            *
+        {{else}}
+            {{shade}}{{exponent}}
+        {{/if}}
         {{#if editable}}
-            <div class="form-inline mb0">
+            <div class="form-inline editStat">
                 {{>editableStat}}
                 <button data-action="setstat" class="btn btn-primary">
                     <i class="icon-ok"></i>
                 </button>
             </div>
-        {{else}}
-            {{shade}}{{exponent}}
         {{/if}}
     </div>
 </template>
 
 <template name="editableStat">
-    {{#unless stat}}
-        <label class="checkbox">
-            <input type="checkbox" name="beginner">
-            Beginner
-        </label>
-    {{/unless}}
-    <select name="shade" class="span1">
+    <select name="shade" class="input-small">
         <option {{selected shade 'B'}} value="B">B</option>
         <option {{selected shade 'G'}} value="G">G</option>
         <option {{selected shade 'W'}} value="W">W</option>
     </select>
-    <select name="exponent" class="span1">
+    <select name="exponent" class="input-small">
         <option {{selected exponent 1}} value="1">1</option>
         <option {{selected exponent 2}} value="2">2</option>
         <option {{selected exponent 3}} value="3">3</option>

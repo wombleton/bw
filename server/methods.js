@@ -1,14 +1,7 @@
-function getStat(character, label, stat) {
-    if (stat === undefined) {
-        stat = true;
-    }
-    return _.find(character[stat ? 'stats' : 'skills'], function(stat) {
+function getStat(character, label) {
+    return _.find(character.stats, function(stat) {
         return stat.label === label;
     });
-}
-
-function getSkill(character, label) {
-    return getStat(character, label, false);
 }
 
 function getUpdate(character, skill) {
@@ -19,14 +12,25 @@ function getUpdate(character, skill) {
     update = {
         label: skill.name,
         magic: skill.magic,
-        training: skill.training
+        training: skill.training,
+        stat: skill.stat
     };
 
-    roots = _.compact(_.map(skill.roots, function(root) {
-        return getStat(character, root);
-    }));
+    if (skill.stat) {
+        update.label = update.label.substring(0, 2);
+    }
 
-    if (roots.length < skill.roots.length) {
+    if (skill.roots) {
+        roots = _.compact(_.map(skill.roots, function(root) {
+            return getStat(character, root);
+        }));
+    }
+
+    if (!skill.roots) {
+        update.shade = skill.shade;
+        update.exponent = skill.exponent;
+
+    } else if (roots.length < skill.roots.length) {
         update.shade = 'B';
         update.exponent = 1;
     } else {
@@ -142,15 +146,14 @@ Meteor.methods({
 
         char = {
             owner: this.userId,
-            gameId: options.gameId,
-            skills: []
+            gameId: options.gameId
         };
 
         _.extend(char, _.pick(options, 'stats'));
 
         return Characters.insert(char);
     },
-    updateStat: function(options) {
+    updateSkill: function(options) {
         var character,
             stat,
             statIndex,
@@ -159,18 +162,18 @@ Meteor.methods({
         if (!this.userId) {
             throw new Meteor.Error(403, "You must be logged in");
         }
-        options = _.pick(options, 'characterId', 'label', 'shade', 'exponent');
-        if (_.keys(options).length < 4) {
-            throw new Meteor.Error(403, "Missing one of characterId, label, shade, exponent");
+        options = _.pick(options, 'characterId', 'label', 'shade', 'exponent', 'stat');
+        if (_.keys(options).length < 5) {
+            throw new Meteor.Error(403, "Missing one of characterId, label, shade, exponent, stat");
         }
 
         character = Characters.findOne(options.characterId);
-        stat = getStat(character, options.label, options.stat)
+        stat = getStat(character, options.label)
 
         statIndex = _.indexOf(character.stats, stat);
 
-        update[(stat.stat ? 'stats.' : 'skills.') + statIndex + '.shade'] = options.shade;
-        update[(stat.stat ? 'stats.' : 'skills.') + statIndex + '.exponent'] = options.exponent;
+        update['stats.' + statIndex + '.shade'] = options.shade;
+        update['stats.' + statIndex + '.exponent'] = options.exponent;
 
         Characters.update(options.characterId, {
             $set: update
@@ -191,7 +194,7 @@ Meteor.methods({
 
         character = Characters.findOne(options.characterId);
 
-        if (getSkill(character, options.label, true)) {
+        if (getStat(character, options.label)) {
             return;
         }
 
@@ -202,7 +205,7 @@ Meteor.methods({
 
         Characters.update(options.characterId, {
             $push: {
-                'skills': update
+                'stats': update
             }
         });
     }
