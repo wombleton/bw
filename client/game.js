@@ -46,6 +46,10 @@ Template.game.events = {
             Meteor.call('createCharacter', {
                 gameId: this._id,
                 stats: []
+            }, function(err, characterId) {
+                if (!err) {
+                    Session.set('setCharacterName', characterId);
+                }
             });
         }
     }
