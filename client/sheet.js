@@ -22,7 +22,7 @@ Template.sheet.events({
         } else {
             Session.set('setCharacterName', this._id);
         }
-
+        return false;
     },
     'click [data-action=setstat]': function(e, template) {
         Meteor.call('updateSkill', {
