@@ -27,7 +27,6 @@
 @import "tables.lessimport";
 
 // Components: common
-@import "../font-awesome.lessimport";
 @import "dropdowns.lessimport";
 @import "wells.lessimport";
 @import "component-animations.lessimport";
