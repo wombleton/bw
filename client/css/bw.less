@@ -1,15 +1,10 @@
 @import "bootswatch.lessimport";
+@import "font-awesome/font-awesome.lessimport";
 @import "bootstrap/bootstrap.lessimport";
 
 body {
     padding-top: 70px;
     padding-bottom: 20px;
-}
-
-.game {
-    padding: 10px 0;
-    border-bottom: 1px dashed #888;
-    cursor: pointer;
 }
 
 .player {
@@ -58,11 +53,22 @@ body .mb0 {
 #login-buttons a.login-link-text {
     .btn;
     text-decoration: none;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 #login-dropdown-list {
     top: 10px;
     left: auto;
     right: 10px;
+}
+
+.game {
+    cursor: pointer;
+    .box-shadow(1px 1px 3px rgba(0,0,0,0.7));
+    margin-bottom: 20px;
+    background: white;
+    .border-radius(4px);
+    > div {
+        padding: 20px;
+    }
 }
