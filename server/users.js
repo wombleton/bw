@@ -11,6 +11,7 @@ Meteor.users.allow({
 });
 
 function displayName(user) {
+    console.log(user);
     if (user.username) {
         return user.username;
     } else {
