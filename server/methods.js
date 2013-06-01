@@ -1,6 +1,6 @@
 function getStat(character, label) {
     return _.find(character.stats, function(stat) {
-        return stat.label === label;
+        return stat.stat ? stat.label === label.substring(0,2) : stat.label === label;
     });
 }
 
