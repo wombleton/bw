@@ -10,9 +10,11 @@
                 {{name}}
             </h3>
         </div>
+        {{#if owner}}
         <div class="row-fluid">
             <button class="btn" data-action="add-sheet">Add sheet</button>
         </div>
+        {{/if}}
         {{#each sheets}}
             {{>sheet}}
         {{/each}}
