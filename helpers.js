@@ -3,6 +3,8 @@ if (Meteor.isClient) {
         var user = Meteor.user(),
             gameId = user && user.game;
 
+        Session.set('gameId', gameId);
+
         return gameId ? Games.findOne(gameId) : null;
     });
 

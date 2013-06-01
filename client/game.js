@@ -1,3 +1,17 @@
+Meteor.autorun(function () {
+  Meteor.subscribe("characters", Session.get("gameId"));
+});
+
+function mapSheet(sheet) {
+    sheet.stats = _.map(sheet.stats, function(stat) {
+        stat.slug = stat.label + ':' + sheet._id;
+
+        return stat;
+    });
+
+    return sheet;
+}
+
 Template.game.owner = function() {
     return this.owner === Meteor.userId();
 };
@@ -11,18 +25,19 @@ Template.game.player = function() {
 };
 
 Template.game.sheets = function() {
-    Meteor.subscribe("characters", this._id);
     return sheets = Characters.find({
+        owner: this.owner,
         gameId: this._id
-    }).map(function(c) {
-        c.stats = _.map(c.stats, function(stat) {
-            stat.slug = stat.label + ':' + c._id;
+    }).map(mapSheet);
+};
 
-            return stat;
-        });
-
-        return c;
-    });
+Template.game.pcs = function() {
+    return sheets = Characters.find({
+        owner: {
+            $not: this.owner
+        },
+        gameId: this._id
+    }).map(mapSheet);
 };
 
 Template.game.events = {

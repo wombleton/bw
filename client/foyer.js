@@ -16,7 +16,6 @@ Template.nav.events = {
         return false;
     }
 };
-
 // PAGE
 Template.gameList.games = function() {
     return Games.find({}, {
