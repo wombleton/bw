@@ -11,11 +11,12 @@ Meteor.users.allow({
 });
 
 function displayName(user) {
-    console.log(user);
-    if (user.username) {
+    if (user.twitter && user.twitter.screenName) {
+        return user.twitter.screenName;
+    } else if (user.username) {
         return user.username;
     } else {
-        return user.emails[0].address;
+        return user.emails && user.emails[0] && user.emails[0].address;
     }
 };
 
