@@ -24,7 +24,7 @@ Meteor.Router.add({
 Meteor.Router.beforeRouting = function() {
     if (window.ga) {
         ga('send', 'pageview', {
-            location: window.location.pathname
+            page: window.location.pathname
         });
     }
 }
