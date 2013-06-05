@@ -21,10 +21,11 @@ Meteor.Router.add({
     }
 });
 
-Meteor.Router.beforeRouting = function() {
+Meteor.Router.beforeRouting = function(context) {
     if (window.ga) {
         ga('send', 'pageview', {
-            page: window.location.pathname
+            page: context.pathname,
+            title: context.title
         });
     }
 }
