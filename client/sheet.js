@@ -68,10 +68,6 @@ Template.sheet.events({
     }
 });
 
-Template.sheet.statList = function() {
-    return JSON.stringify(Skills.find({}).map(function (x) { return x.name; })).replace(/"/g, '&quot;');
-};
-
 Template.sheet.addSkill = function() {
     return Session.get('addSkill') === this._id;
 };

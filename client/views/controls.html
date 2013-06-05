@@ -1,0 +1,11 @@
+<template name="controls">
+  <div class="row-fluid">
+    <div class="well">
+      <button class="btn btn-link">{{code}}</button>
+      <div class="btn-group">
+        <button class="btn" data-action="set-obstacle" {{#if test}}disabled="disabled"{{/if}}>Set Obstacle</button>
+        <button class="btn" disabled="disabled">Versus Test</button>
+      </div>
+    </div>
+  </div>
+</template>

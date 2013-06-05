@@ -208,5 +208,19 @@ Meteor.methods({
                 'stats': update
             }
         });
+    },
+    addTest: function(gameId) {
+        if (!this.userId) {
+            throw new Meteor.Error(403, "You must be logged in");
+        }
+        if (!_.isString(gameId)) {
+            throw new Meteor.Error(403, "Missing gameId");
+        }
+
+        Tests.insert({
+            active: true,
+            gameId: gameId,
+            owner: this.userId
+        });
     }
 });

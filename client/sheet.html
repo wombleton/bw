@@ -1,92 +1,58 @@
 <template name="sheet">
-    <div class="well">
-        <div class="row-fluid">
-            <div class="span12">
-                {{#if setCharacterName}}
-                    <input type="text" class="mb0" name="name" value="{{name}}" placeholder="Name me!" autofocus="autofocus">
-                    <button data-action="setname" class="btn"><i class="icon-thumbs-up"></i></button>
-                {{else}}
-                    {{#if name}}
-                        {{name}}
-                    {{else}}
-                        No name
-                    {{/if}}
-                {{/if}}
-                {{#if owner}}
-                  <div class="dropdown pull-right">
-                    <button data-toggle="dropdown" class="btn btn-mini">
-                        <i class="icon-double-angle-down"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a data-action="setname" href>Change name</a></li>
-                      <li><a data-action="add-skill" href>Add skill</a></li>
-                    </ul>
-                  </div>
-                {{/if}}
-            </div>
-        </div>
-        {{#if stats}}
-        <div class="row-fluid">
-            <div class="span12{{#if owner}} owner{{/if}}">
-                {{#each stats}}
-                    {{>stat}}
-                {{/each}}
-            </div>
-        </div>
-        {{/if}}
-        {{#if skills}}
-        <div class="row-fluid">
-            <div class="span12{{#if owner}} owner{{/if}}">
-                {{#each skills}}
-                    {{>stat}}
-                {{/each}}
-            </div>
-        </div>
-        {{/if}}
-        {{#if learning}}
-        <div class="row-fluid">
-            <div class="span12{{#if owner}} owner{{/if}}">
-                {{#each learning}}
-                    {{>stat}}
-                {{/each}}
-            </div>
-        </div>
-        {{/if}}
-        {{#if owner}}
-          {{#if addSkill}}
-            <div class="row-fluid">
-                <div class="span12">
-                    <div class="form-inline">
-                            <input type="text" name="new-skill" data-provide="typeahead" data-source="{{{statList}}}" autocomplete="off" autofocus="autofocus">
-                            <button data-action="add-skill" class="btn">
-                                <i class="icon-plus"></i>
-                            </button>
-                            <a data-action="done""btn" href>Done</a>
-                    </div>
-                </div>
-            </div>
-          {{/if}}
-        {{/if}}
+<div class="well">
+  <div class="row-fluid">
+    <div class="span12">
+      {{#if name}}
+        {{name}}
+      {{else}}
+        No name
+      {{/if}}
+      {{#if owner}}
+      <a class="btn btn-mini pull-right" href="/sheet/{{_id}}">
+        <i class="icon-cog"></i>
+      </a>
+      {{/if}}
     </div>
+  </div>
+  {{#if stats}}
+  <div class="row-fluid">
+    <div class="span12{{#if owner}} owner{{/if}}">
+      {{#each stats}}
+        {{>stat}}
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
+  {{#if skills}}
+  <div class="row-fluid">
+    <div class="span12{{#if owner}} owner{{/if}}">
+      {{#each skills}}
+        {{>stat}}
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
+  {{#if learning}}
+  <div class="row-fluid">
+    <div class="span12{{#if owner}} owner{{/if}}">
+      {{#each learning}}
+      {{>stat}}
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
+</div>
 </template>
 
 <template name="stat">
-    <div class="stat">
-        <b>{{label}}</b>
-        {{#if training}}
-            *
-        {{else}}
-            {{shade}}{{exponent}}
-        {{/if}}
-        {{#if editable}}
-            <div class="form-inline editStat">
-                {{>editableStat}}
-                <button data-action="setstat" class="btn btn-primary">
-                    <i class="icon-ok"></i>
-                </button>
-            </div>
-        {{/if}}
-    </div>
+<div class="stat">
+  <b>{{label}}</b>
+  {{#if training}}
+    *
+  {{else}}
+    {{shade}}{{exponent}}
+  {{/if}}
+</div>
 </template>
 
 <template name="editableStat">

@@ -23,3 +23,10 @@ Meteor.publish("characters", function(gameId) {
 Meteor.publish("skills", function() {
     return Skills.find();
 });
+
+Meteor.publish("tests", function(gameId) {
+    return Tests.find({
+        active: true,
+        gameId: gameId
+    });
+});
