@@ -1,8 +1,11 @@
 <template name="nav">
   <ul class="nav">
-    {{#if game}}
     <li>
       <a href="/">Home</a>
+    </li>
+    {{#if currentUser}}
+    <li>
+      <a href="/games">Games</a>
     </li>
     {{/if}}
   </ul>

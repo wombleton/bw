@@ -1,31 +1,31 @@
 <template name="game">
-    <div class="container-fluid">
-        {{#if owner}}
-          {{>controls}}
-        {{/if}}
-        {{#if test}}
-          {{>test .}}
-        {{/if}}
-        <div class="row-fluid">
-          <div class="span6">
-            <h3>Players</h3>
-            {{#each pcs}}
-              {{>sheet}}
-            {{/each}}
-          </div>
-          <div class="span6">
-            <h3>NPCs</h3>
-            {{#each sheets}}
-              {{>sheet}}
-            {{/each}}
-            {{#if owner}}
-            <div class="row-fluid">
-                <button class="btn" data-action="add-sheet">Add NPC</button>
-            </div>
-            {{/if}}
-          </div>
-        </div>
+<div class="container-fluid">
+  {{#if owner}}
+    {{>controls}}
+  {{/if}}
+  {{#if test}}
+    {{>test .}}
+  {{/if}}
+  <div class="row-fluid">
+    <div class="span6">
+      <h3>Players</h3>
+      {{#each pcs}}
+        {{>sheet}}
+      {{/each}}
     </div>
+    <div class="span6">
+      <h3>NPCs</h3>
+      {{#each sheets}}
+      {{>sheet}}
+      {{/each}}
+      {{#if owner}}
+      <div class="row-fluid">
+        <button class="btn" data-action="add-sheet">Add NPC</button>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
 </template>
 
 <template name="test">
