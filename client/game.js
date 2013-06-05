@@ -40,6 +40,16 @@ Template.game.pcs = function() {
     }).map(mapSheet);
 };
 
+Template.controls.test = Template.game.test = function() {
+    return _.find(this.tests, function(test) {
+        return test.active;
+    });
+};
+
+Template.test.statList = function() {
+    return JSON.stringify(Skills.find({}).map(function (x) { return x.name; })).replace(/"/g, '&quot;');
+};
+
 Template.game.events = {
     'click [data-action=add-sheet]': function(e, template) {
         if (Meteor.userId() === this.owner) {
@@ -49,6 +59,18 @@ Template.game.events = {
             }, function(err, characterId) {
                 if (!err) {
                     Session.set('setCharacterName', characterId);
+                }
+            });
+        }
+    },
+    'click [data-action=set-obstacle]': function(e, template) {
+        if (Meteor.userId() === this.owner) {
+            Games.update(this._id, {
+                $push: {
+                    tests: {
+                        active: true,
+                        createdAt: Date.now()
+                    }
                 }
             });
         }

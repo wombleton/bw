@@ -3,17 +3,20 @@
         {{#if owner}}
           {{>controls}}
         {{/if}}
+        {{#if test}}
+          {{>test .}}
+        {{/if}}
         <div class="row-fluid">
           <div class="span6">
             <h3>Players</h3>
             {{#each pcs}}
-                {{>sheet}}
+              {{>sheet}}
             {{/each}}
           </div>
           <div class="span6">
             <h3>NPCs</h3>
             {{#each sheets}}
-                {{>sheet}}
+              {{>sheet}}
             {{/each}}
             {{#if owner}}
             <div class="row-fluid">
@@ -25,12 +28,44 @@
     </div>
 </template>
 
+<template name="test">
+  <div class="row-fluid">
+    <div class="span12">
+      <form class="form-inline">
+        {{#each pcs}}
+          <label class="radio">
+            <input type="radio">
+            {{name}}
+          </label>
+        {{/each}}
+        <input type="text" name="skill" data-provide="typeahead" data-source="{{{statList}}}" placeholder="Skill" autocomplete="off" autofocus="autofocus">
+        <label>
+          Ob
+          <select name="exponent" class="input-small">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </label>
+        <button class="btn" type="submit" disabled="disabled">Set</button>
+      </form>
+    </div>
+  </div> 
+</template>
+
 <template name="controls">
   <div class="row-fluid">
     <div class="well">
       <button class="btn btn-link">{{code}}</button>
       <div class="btn-group">
-        <button class="btn" disabled="disabled">Set Obstacle</button>
+        <button class="btn" data-action="set-obstacle" {{#if test}}disabled="disabled"{{/if}}>Set Obstacle</button>
         <button class="btn" disabled="disabled">Versus Test</button>
       </div>
     </div>
