@@ -20,3 +20,9 @@ Meteor.Router.add({
         return 'game';
     }
 });
+
+Meteor.Router.beforeRouting = function() {
+    if (window.ga) {
+        ga('send', 'pageview');
+    }
+}
