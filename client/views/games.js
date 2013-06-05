@@ -26,19 +26,6 @@ Template.games.createGame = function(e, template) {
     }
 };
 
-Template.games.joinGame = function(e, template) {
-    var code = template.find('[name=join]').value;
-
-    e.preventDefault();
-
-    if (code.length) {
-        Meteor.call('joinGame', code);
-        template.find('[name=join]').value = '';
-    } else {
-        Session.set("createError", "Games have to have descriptions.");
-    }
-};
-
 Template.games.events({
     'click .create [type=submit]': Template.games.createGame,
     'submit .create form': Template.games.createGame

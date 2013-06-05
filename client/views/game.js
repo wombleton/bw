@@ -12,6 +12,10 @@ function mapSheet(sheet) {
     return sheet;
 }
 
+Template.game.game = function() {
+    return Games.findOne(Session.get('gameId'));
+};
+
 Template.game.owner = function() {
     return this.owner === Meteor.userId();
 };
