@@ -11,16 +11,7 @@ Meteor.publish("directory", function() {
 });
 
 Meteor.publish("games", function() {
-    return Games.find({
-        $or: [
-            {
-                'players.id': this.userId
-            },
-            {
-                owner: this.userId
-            }
-        ]
-    });
+    return Games.find();
 });
 
 Meteor.publish("characters", function(gameId) {

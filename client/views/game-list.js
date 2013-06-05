@@ -1,22 +1,5 @@
-// All Tomorrow's Games -- client
-
-Meteor.subscribe("directory");
 Meteor.subscribe("games");
-Meteor.subscribe("skills");
 
-///////////////////////////////////////////////////////////////////////////////
-
-Template.nav.events = {
-    'click a': function() {
-        Meteor.users.update(Meteor.userId(), {
-            $set: {
-                game: null
-            }
-        });
-        return false;
-    }
-};
-// PAGE
 Template.gameList.games = function() {
     return Games.find({}, {
         sort: {
@@ -24,21 +7,6 @@ Template.gameList.games = function() {
         }
     });
 };
-
-Template.gameList.canJoin = function() {
-    var count = Games.find({
-        archived: null
-    }).count();
-    return count < 3;
-}
-
-Template.gameList.canCreate = function() {
-    var count = Games.find({
-        archived: null,
-        'gm.id': Meteor.userId()
-    }).count();
-    return count < 1;
-}
 
 Template.gameList.createGame = function(e, template) {
     var name = template.find('[name=create]').value;
@@ -73,18 +41,3 @@ Template.gameList.events({
     'submit .create form': Template.gameList.createGame,
     'submit .join form': Template.gameList.joinGame
 });
-
-Template.gameItem.events({
-    'click': function(event, template) {
-        var game = template.data;
-        Meteor.users.update(Meteor.userId(), {
-            $set: {
-                game: game._id
-            }
-        });
-    }
-});
-
-Template.gameItem.owner = function(e, template) {
-    return this.owner === Meteor.userId();
-};
