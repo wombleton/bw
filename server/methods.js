@@ -109,36 +109,27 @@ Meteor.methods({
 
         return Games.remove(gameId);
     },
-    joinGame: function(code) {
+    joinGame: function(gameId) {
         var game,
             key = ['users'];
 
         if (! this.userId) {
             throw new Meteor.Error(403, "You must be logged in");
         }
-        if (!_.isString(code)) {
+        if (!_.isString(gameId)) {
             throw new Meteor.Error(400, "Required code missing.");
         }
 
-        game = Games.findOne({
-            code: code
-        });
+        game = Games.findOne(gameId);
 
         if (!game) {
             return 'gameNotFound';
         } else if (game.gm === this.userId) {
             return game._id;
         } else {
-            Games.update(game._id, {
-                $addToSet: {
-                    players: {
-                        id: this.userId,
-                        name: Meteor.users.displayName(Meteor.user())
-                    }
-                }
-            });
             Meteor.call('createCharacter', {
                 gameId: game._id,
+                name: Meteor.users.displayName(Meteor.user()),
                 stats: [
                     { label: 'Wi', shade: 'B', stat: true, exponent: 3 },
                     { label: 'Pe', shade: 'B', stat: true, exponent: 3 },

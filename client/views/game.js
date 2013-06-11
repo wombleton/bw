@@ -13,11 +13,10 @@ Template.game.owner = function() {
     return this.owner === Meteor.userId();
 };
 
-Template.game.player = function() {
-    var userId = Meteor.userId();
-
-    return _.find(this.players, function(player) {
-        return player.id === userId;
+Template.game.canJoin = function() {
+    return !this.locked && !Characters.findOne({
+        owner: Meteor.userId(),
+        gameId: this._id
     });
 };
 
@@ -54,6 +53,11 @@ Template.game.events = {
                     Session.set('setCharacterName', characterId);
                 }
             });
+        }
+    },
+    'click [data-action=join-game]': function(e, template) {
+        if (Meteor.userId() !== this.owner) {
+            Meteor.call('joinGame', this._id);
         }
     }
 };
