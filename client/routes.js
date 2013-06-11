@@ -18,6 +18,14 @@ Meteor.Router.add({
     '/games/:id': function(id) {
         Session.set('gameId', id);
         return 'game';
+    },
+    '/games/:id/edit': function(id) {
+        Session.set('gameId', id);
+        return 'editGame';
+    },
+    '/sheets/:id': function(id) {
+        Session.set('sheetId', id);
+        return 'editableSheet';
     }
 });
 

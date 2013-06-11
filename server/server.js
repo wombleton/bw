@@ -14,10 +14,17 @@ Meteor.publish("games", function() {
     return Games.find();
 });
 
-Meteor.publish("characters", function(gameId) {
-    return Characters.find({
-        gameId: gameId
-    });
+Meteor.publish("characters", function(options) {
+    var opt = {};
+
+    if (options.gameId) {
+        opt.gameId = options.gameId;
+    }
+    if (options.characterId) {
+        opt._id = options.characterId;
+    }
+
+    return Characters.find(opt);
 });
 
 Meteor.publish("skills", function() {

@@ -91,6 +91,24 @@ Meteor.methods({
             }
         });
     },
+    deleteGame: function(gameId) {
+        var game;
+
+        if (!gameId) {
+            throw new Meteor.Error(403, "You need to supply a game id");
+        }
+        if (! this.userId) {
+            throw new Meteor.Error(403, "You must be logged in");
+        }
+
+        game = Games.findOne(gameId);
+
+        if (game.owner !== this.userId) {
+            throw new Meteor.Error(403, "Can only delete games you own.");
+        }
+
+        return Games.remove(gameId);
+    },
     joinGame: function(code) {
         var game,
             key = ['users'];
