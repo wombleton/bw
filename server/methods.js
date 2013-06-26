@@ -135,12 +135,12 @@ Meteor.methods({
             });
 
             stats = [
-                { label: 'Wi', shade: 'B', stat: true, exponent: 3 },
-                { label: 'Pe', shade: 'B', stat: true, exponent: 3 },
-                { label: 'Ag', shade: 'B', stat: true, exponent: 3 },
-                { label: 'Sp', shade: 'B', stat: true, exponent: 3 },
-                { label: 'Po', shade: 'B', stat: true, exponent: 3 },
-                { label: 'Fo', shade: 'B', stat: true, exponent: 3 }
+                { label: 'Will', shade: 'B', stat: true, exponent: 3 },
+                { label: 'Perception', shade: 'B', stat: true, exponent: 3 },
+                { label: 'Agility', shade: 'B', stat: true, exponent: 3 },
+                { label: 'Speed', shade: 'B', stat: true, exponent: 3 },
+                { label: 'Power', shade: 'B', stat: true, exponent: 3 },
+                { label: 'Forte', shade: 'B', stat: true, exponent: 3 }
             ];
 
             _.each(stats, function(stat) {
