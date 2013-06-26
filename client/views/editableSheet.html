@@ -1,10 +1,30 @@
 <template name="editableSheet">
 <div class="container-fluid">
   {{#with sheet}}
-    <input type="text" value="{{name}}">
-    {{#each stats}}
-      {{>editableStat}}
-    {{/each}}
+  <div class="row-fluid">
+    <div class="span12">
+      <button class="btn">
+        <i class="icon-level-up"></i>
+
+        {{game.name}}
+      </button>
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="span12">
+      <input type="text" name="name" value="{{name}}" placeholder="name">
+    </div>
+  </div>
+  {{#each stats}}
+  {{>editableStat}}
+  {{/each}}
+  <div class="row-fluid">
+    <div class="span12">
+      <button class="btn btn-small btn-primary">
+        <i class="icon-plus"></i>
+      </button>
+    </div>
+  </div>
   {{/with}}
 </div>
 </template>
