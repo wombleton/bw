@@ -1,12 +1,3 @@
-function setName(model, template) {
-    Characters.update(model._id, {
-        $set: {
-            name: template.find('[type=text]').value
-        }
-    });
-    Session.set('setCharacterName', undefined);
-}
-
 function addSkill(e, template) {
     Meteor.call('addSkill', {
         characterId: template.data._id,

@@ -216,36 +216,6 @@ Meteor.methods({
             $set: update
         });
     },
-    addSkill: function(options) {
-        var character,
-            skill,
-            update;
-
-        if (!this.userId) {
-            throw new Meteor.Error(403, "You must be logged in");
-        }
-        options = _.pick(options, 'characterId', 'label');
-        if (_.keys(options).length < 2) {
-            throw new Meteor.Error(403, "Missing one of characterId, label");
-        }
-
-        character = Characters.findOne(options.characterId);
-
-        if (getStat(character, options.label)) {
-            return;
-        }
-
-        skill = Skills.findOne({
-            name: options.label
-        });
-        update = getUpdate(character, skill);
-
-        Characters.update(options.characterId, {
-            $push: {
-                'stats': update
-            }
-        });
-    },
     addTest: function(gameId) {
         if (!this.userId) {
             throw new Meteor.Error(403, "You must be logged in");
