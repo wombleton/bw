@@ -110,8 +110,10 @@ Meteor.methods({
         return Games.remove(gameId);
     },
     joinGame: function(gameId) {
-        var game,
-            key = ['users'];
+        var sheetId,
+            game,
+            key = ['users'],
+            stats;
 
         if (! this.userId) {
             throw new Meteor.Error(403, "You must be logged in");
@@ -127,18 +129,46 @@ Meteor.methods({
         } else if (game.gm === this.userId) {
             return game._id;
         } else {
-            return Meteor.call('createCharacter', {
+            var sheetId = Meteor.call('createCharacter', {
                 gameId: game._id,
-                name: Meteor.users.displayName(Meteor.user()),
-                stats: [
-                    { label: 'Wi', shade: 'B', stat: true, exponent: 3 },
-                    { label: 'Pe', shade: 'B', stat: true, exponent: 3 },
-                    { label: 'Ag', shade: 'B', stat: true, exponent: 3 },
-                    { label: 'Sp', shade: 'B', stat: true, exponent: 3 },
-                    { label: 'Po', shade: 'B', stat: true, exponent: 3 },
-                    { label: 'Fo', shade: 'B', stat: true, exponent: 3 }
-                ]
+                name: Meteor.users.displayName(Meteor.user())
             });
+
+            stats = [
+                { label: 'Wi', shade: 'B', stat: true, exponent: 3 },
+                { label: 'Pe', shade: 'B', stat: true, exponent: 3 },
+                { label: 'Ag', shade: 'B', stat: true, exponent: 3 },
+                { label: 'Sp', shade: 'B', stat: true, exponent: 3 },
+                { label: 'Po', shade: 'B', stat: true, exponent: 3 },
+                { label: 'Fo', shade: 'B', stat: true, exponent: 3 }
+            ];
+
+            _.each(stats, function(stat) {
+                Meteor.call('addStat', _.extend(stat, {
+                    sheetId: sheetId
+                }));
+            });
+
+            return sheetId;
+        }
+    },
+    addStat: function(options) {
+        var existing;
+
+        if (!this.userId) {
+            throw new Meteor.Error(403, "You must be logged in");
+        }
+        options = _.pick(options, 'sheetId', 'label', 'shade', 'exponent', 'stat');
+        if (_.keys(options).length < 5) {
+            throw new Meteor.Error(403, "Missing one of sheetId, label, shade, exponent, stat");
+        }
+
+        existing = Stats.findOne({
+            sheetId: options.sheetId,
+            label: options.label
+        });
+        if (!existing) {
+            return Stats.insert(options);
         }
     },
     createCharacter: function(options) {
@@ -156,7 +186,7 @@ Meteor.methods({
             owner: this.userId
         };
 
-        _.extend(char, _.pick(options, 'name', 'gameId', 'stats'));
+        _.extend(char, _.pick(options, 'name', 'gameId'));
 
         return Characters.insert(char);
     },

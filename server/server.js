@@ -37,3 +37,10 @@ Meteor.publish("tests", function(gameId) {
         gameId: gameId
     });
 });
+
+Meteor.publish('sheetstats', function(sheetId) {
+    return Stats.find({
+        sheetId: sheetId
+    });
+
+});

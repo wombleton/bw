@@ -1,8 +1,8 @@
 Meteor.autorun(function () {
-  Meteor.subscribe("characters", {
-      gameId: Session.get("gameId")
-  });
-  Meteor.subscribe("tests", Session.get("gameId"));
+    Meteor.subscribe("characters", {
+        gameId: Session.get("gameId")
+    });
+    Meteor.subscribe("tests", Session.get("gameId"));
 });
 
 Template.game.game = function() {

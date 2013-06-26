@@ -1,4 +1,4 @@
-Skills = new Meteor.Collection("skills");
+Skills = new Meteor.Collection('skills');
 
 Skills.allow({
     insert: function (userId, stat) {

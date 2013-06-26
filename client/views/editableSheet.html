@@ -1,7 +1,10 @@
 <template name="editableSheet">
 <div class="container-fluid">
   {{#with sheet}}
-    {{name}}
+    <input type="text" value="{{name}}">
+    {{#each stats}}
+      {{>editableStat}}
+    {{/each}}
   {{/with}}
 </div>
 </template>
