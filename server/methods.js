@@ -127,7 +127,7 @@ Meteor.methods({
         } else if (game.gm === this.userId) {
             return game._id;
         } else {
-            Meteor.call('createCharacter', {
+            return Meteor.call('createCharacter', {
                 gameId: game._id,
                 name: Meteor.users.displayName(Meteor.user()),
                 stats: [
@@ -139,7 +139,6 @@ Meteor.methods({
                     { label: 'Fo', shade: 'B', stat: true, exponent: 3 }
                 ]
             });
-            return game._id;
         }
     },
     createCharacter: function(options) {
@@ -154,11 +153,10 @@ Meteor.methods({
         }
 
         char = {
-            owner: this.userId,
-            gameId: options.gameId
+            owner: this.userId
         };
 
-        _.extend(char, _.pick(options, 'stats'));
+        _.extend(char, _.pick(options, 'name', 'gameId', 'stats'));
 
         return Characters.insert(char);
     },

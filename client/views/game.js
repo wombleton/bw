@@ -57,7 +57,11 @@ Template.game.events = {
     },
     'click [data-action=join-game]': function(e, template) {
         if (Meteor.userId() !== this.owner) {
-            Meteor.call('joinGame', this._id);
+            Meteor.call('joinGame', this._id, function(err, characterId) {
+                if (!err) {
+                    Meteor.Router.to('/sheets/' + characterId);
+                }
+            });
         }
     }
 };
