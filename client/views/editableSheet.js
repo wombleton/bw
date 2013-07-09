@@ -16,7 +16,7 @@ Template.editableSheet.game = function() {
     return Games.findOne(Template.editableSheet.sheet().gameId);
 };
 
-function addSkill(e, template) {
+function addStat(e, template) {
     Meteor.call('addStat', {
         sheetId: this._id,
         label: template.find('[name=skill]').value
@@ -25,6 +25,10 @@ function addSkill(e, template) {
     });
     template.find('[name=skill]').value = '';
 }
+
+Template.editableSheet.created = function() {
+    debugger;
+};
 
 Template.editableSheet.events({
     'input [name=name]': function(e, template) {
@@ -36,7 +40,7 @@ Template.editableSheet.events({
     },
     'keyup [name=skill]': function(e, template) {
         if (e.keyCode === 13) {
-            addSkill(e, template);
+            addStat(e, template);
             return false;
         }
     }
