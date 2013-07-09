@@ -135,12 +135,12 @@ Meteor.methods({
             });
 
             stats = [
-                { label: 'Will', shade: 'B', stat: true, exponent: 3 },
-                { label: 'Perception', shade: 'B', stat: true, exponent: 3 },
-                { label: 'Agility', shade: 'B', stat: true, exponent: 3 },
-                { label: 'Speed', shade: 'B', stat: true, exponent: 3 },
-                { label: 'Power', shade: 'B', stat: true, exponent: 3 },
-                { label: 'Forte', shade: 'B', stat: true, exponent: 3 }
+                { label: 'Will', stat: true },
+                { label: 'Perception', stat: true },
+                { label: 'Agility', stat: true },
+                { label: 'Speed', stat: true },
+                { label: 'Power', stat: true },
+                { label: 'Forte', stat: true }
             ];
 
             _.each(stats, function(stat) {
@@ -159,9 +159,14 @@ Meteor.methods({
             throw new Meteor.Error(403, "You must be logged in");
         }
         options = _.pick(options, 'sheetId', 'label', 'shade', 'exponent', 'stat');
-        if (_.keys(options).length < 5) {
-            throw new Meteor.Error(403, "Missing one of sheetId, label, shade, exponent, stat");
+        if (!options.sheetId || !options.label) {
+            throw new Meteor.Error(403, "Missing one of sheetId or label");
         }
+        _.defaults(options, {
+            shade: 'B',
+            exponent: 3,
+            stat: false
+        });
 
         existing = Stats.findOne({
             sheetId: options.sheetId,
@@ -189,32 +194,6 @@ Meteor.methods({
         _.extend(char, _.pick(options, 'name', 'gameId'));
 
         return Characters.insert(char);
-    },
-    updateSkill: function(options) {
-        var character,
-            stat,
-            statIndex,
-            update = {};
-
-        if (!this.userId) {
-            throw new Meteor.Error(403, "You must be logged in");
-        }
-        options = _.pick(options, 'characterId', 'label', 'shade', 'exponent', 'stat');
-        if (_.keys(options).length < 5) {
-            throw new Meteor.Error(403, "Missing one of characterId, label, shade, exponent, stat");
-        }
-
-        character = Characters.findOne(options.characterId);
-        stat = getStat(character, options.label)
-
-        statIndex = _.indexOf(character.stats, stat);
-
-        update['stats.' + statIndex + '.shade'] = options.shade;
-        update['stats.' + statIndex + '.exponent'] = options.exponent;
-
-        Characters.update(options.characterId, {
-            $set: update
-        });
     },
     addTest: function(gameId) {
         if (!this.userId) {
